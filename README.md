@@ -6,7 +6,7 @@ Repositório do projeto de Biblioteca Pública, sendo parte integrante do trabal
 2. Marcelo Pinto
 3. Vitor Lindberg
 
-## Estrutura do projeto
+## Estrutura de pastas do projeto
 
 ### config_server
 Contem as configurações da máquina usada como servidor (Docker)
@@ -15,6 +15,6 @@ Contem as configurações da máquina usada como servidor (Docker)
 Contem as configurações da máquina utilizada como cliente de desenvolvimento
 
 ### codigo
-Contem o código fonte usado para a aplicação
+Contem o código fonte da aplicação propriamente dita
 
 
