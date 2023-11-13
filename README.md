@@ -1,4 +1,4 @@
-# Projeto bibpub-imd
+# Projeto de Aplicação WE para Biblioteca Pública
 Repositório do projeto de Biblioteca Pública, sendo parte integrante do trabalho final da disciplina de PPGTI1004-DESENVOLVIMENTO WEB 2, do PPGTI, IMD, ministrada pelo prof. Jean Mario Moreira de Lima.
 
 ## GRUPO:
