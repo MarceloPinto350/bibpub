@@ -1,7 +1,7 @@
 # Projeto de Aplicação WEB para Biblioteca Pública
 Repositório do projeto de Biblioteca Pública, sendo parte integrante do trabalho final da disciplina de PPGTI1004-DESENVOLVIMENTO WEB 2, do PPGTI, IMD, ministrada pelo prof. Jean Mario Moreira de Lima.
 
-## GRUPO:
+## Componenete do grupo
 1. Alikson Oliveira
 2. Marcelo Pinto
 3. Vitor Lindberg
