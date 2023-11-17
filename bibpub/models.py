@@ -2,6 +2,7 @@ from django.db import models
 
 # outros imports usados
 from datetime import datetime
+from django.urls import reverse 
 
 class Categoria(models.Model):
     descricao = models.TextField('Descrição', unique=True)
@@ -145,10 +146,18 @@ class Obra(models.Model):
     
     def __str__(self):
         return self.titulo    
+    
+    def get_absolute_url(self):
+        return reverse ("obra",args=[str(self.id)]) 
+    
+    def mostra_categoria(self):
+        return ', '.join(categoria.descricao for categoria in self.categoria.all()[:1])
+    mostra_categoria.short_description = "Categoria"
         
     # define as configurações da classe Meta (dados de BD)
     class Meta:
         db_table = "tb_obra"
+        ordering = ["titulo","-datacadastro"] # traz por padrão os registros ordenados pelo título e data de registro decrescente
         verbose_name = 'Obra'
         verbose_name_plural = 'Obras'
         permissions = [
