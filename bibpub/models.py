@@ -118,7 +118,7 @@ class Obra(models.Model):
     edicao  = models.PositiveSmallIntegerField("Número da edição da obra", default=1, null=False)
     isbn  = models.CharField("Número do ISBN da obra", null=True)   # se for livro
     issn  = models.CharField("Número do ISSN da obra", null=True)   # se for periódico
-    tipo  = models.PositiveSmallIntegerField("Tipo de obra", max_length=10, null=False)
+    tipo  = models.CharField("Tipo de obra", max_length=10, null=False, choices=TipoObra)
     categoria = models.ForeignKey (Categoria,on_delete=models.CASCADE,)
     autor =  models.ForeignKey (Autor,on_delete=models.CASCADE,)
     editora = models.ForeignKey (Editora,on_delete=models.CASCADE,)
