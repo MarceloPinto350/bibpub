@@ -80,7 +80,18 @@ WSGI_APPLICATION = "bibpub.wsgi.application"
 #        "NAME": BASE_DIR / "db.sqlite3",
 #    }
 #}
-DATABASES = {'default': {'ENGINE': 'django.db.backends.postgresql_psycopg2', 'NAME': 'bibpub', 'USER': 'postgres', 'PASSWORD': '', 'HOST': '127.0.0.1', 'PORT': '5432'}}
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'bibpub',
+        'USER': 'bibpub',
+        'PASSWORD': '@dm1n',
+        'HOST': '172.17.0.3',
+        'PORT': '5432',
+    }
+}
+
 #
 
 # Password validation
@@ -105,9 +116,11 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+#LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "pt-br"
 
-TIME_ZONE = "UTC"
+#TIME_ZONE = "UTC"
+TIME_ZONE = "America/Fortaleza"
 
 USE_I18N = True
 

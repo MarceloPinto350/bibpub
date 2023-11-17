@@ -16,6 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from . import views 
+
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path ("",views.index, name="index"),    # caminho raiz
+    path ("obra/<int:obra_id>/", views.obra,name="obra"),    #visualiza
+    path ("admin/", admin.site.urls),
 ]

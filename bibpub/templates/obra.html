@@ -1,0 +1,11 @@
+<h1>Detalhe da obra</h1>
+<p></p>
+{ % if ultimas_obras_list %}
+    <ul>
+        {% for obras in ultimas_obras_list %}
+            <li><a href="{% url 'index' obra.id }">{{ obra.titulo }}</a></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Nenhuma obra cadastrada.</p>
+{% endif %}

@@ -7,7 +7,7 @@ O ambiente para rodar os serviços foi configurado em uma máquina virtual do Or
 * CPU: 3
 * Rede: Bridge
 
-## Como proceder a configuração:
+## Como proceder a configuração inicial da máquina:
 Acessar a máquina virtual, acessar o prompt de comando, compiar o arquivo **inicializaConfig.sh** para uma pasta local e proceder a execução dos seguintes comandos:
 * $ chmod +x inicializaConfig.sh
 * $ ./inicializaConfig.sh
