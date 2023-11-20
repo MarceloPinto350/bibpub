@@ -111,7 +111,7 @@ class Editora(models.Model):
     nome = models.CharField("Nome da editora", max_length=200, null=False, unique=True)
     email = models.CharField("E-Mail de contato da editora", max_length=254, null=False)
     # criar validação para os e-mails
-    pais = models.CharField("Pas da editora", max_length=100, null=False)
+    pais = models.CharField("País da editora", max_length=100, null=False)
     # validar conformme tabela de países a ser criada
 
     def __str__(self):
@@ -136,8 +136,8 @@ class Obra(models.Model):
     anopublicacao = models.PositiveSmallIntegerField("Ano de publicação da obra", null=False)
     # criar validação para o maior valor ser o ano corrente e o menor 100
     edicao  = models.PositiveSmallIntegerField("Número da edição da obra", default=1, null=False)
-    isbn  = models.CharField("Número do ISBN da obra", null=True)   # se for livro
-    issn  = models.CharField("Número do ISSN da obra", null=True)   # se for periódico
+    isbn  = models.CharField('Número do ISBN da obra', max_length=20, null=True, blank=True)   # se for livro
+    issn  = models.CharField('Número do ISSN da obra', max_length=20, null=True, blank=True)   # se for periódico
     tipo  = models.CharField("Tipo de obra", max_length=10, null=False, choices=TipoObra.choices)
     datacadastro = models.DateTimeField("Data de registro da obra",auto_now_add=True,null=False,db_index=True)
     categoria = models.ForeignKey (Categoria,on_delete=models.CASCADE,null=False)
