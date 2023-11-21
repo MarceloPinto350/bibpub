@@ -20,6 +20,6 @@ from . import views
 
 urlpatterns = [
     path ("",views.index, name="index"),    # caminho raiz
-    path ("obra/<int:obra_id>/", views.obra,name="obra"),    #visualiza
+    #path ("obra/<int:obra_id>/", views.obra,name="obra"),    #visualiza
     path ("admin/", admin.site.urls),
 ]
