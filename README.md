@@ -1,4 +1,4 @@
-dbea# Descrição do projeto 
+# Descrição do projeto 
 Este projeto de aplicação para empréstimos de livros para bibliotecas públicas, é parte integrante do trabalho final da disciplina de PPGTI1004-DESENVOLVIMENTO WEB 2, do Programd de pós graduação em Tecnologia da Informação da Universidade Federal do Rio Grando do Norte (UFRN/IMD), ministrada pelo prof. Jean Mario Moreira de Lima.
 
 ## Componenetes do grupo
