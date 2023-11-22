@@ -4,7 +4,7 @@ Repositório do projeto de Biblioteca Pública, sendo parte integrante do trabal
 ## Componenete do grupo
 1. Alikson Oliveira
 2. Marcelo Pinto
-3. Vitor Lindberg
+3. Vitor Lindbergh
 
 
 ## Estrutura de pastas do projeto
