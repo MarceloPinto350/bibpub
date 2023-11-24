@@ -1,6 +1,6 @@
 <h1>Últimas cinco obras registradas</h1>
 <p></p>
-{ % if ultimas_obras_list %}
+{% if ultimas_obras_list %}
     <ul>
         {% for obras in ultimas_obras_list %}
             <li><a href="{% url 'index' obra.id }">{{ obra.titulo }}</a></li>

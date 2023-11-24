@@ -4,7 +4,7 @@ Este projeto de aplicação para empréstimos de livros para bibliotecas públic
 ## Componenetes do grupo
 1. Alikson Oliveira
 2. Marcelo Pinto
-3. Vitor Lindberg
+3. Vitor Lindbergh
 
 ## Requisitos Funcionais
 1. A aplicação deve permitir a consulta às obras cadastradas, pelo título, autor,  através da internet a qualquer pessoa;

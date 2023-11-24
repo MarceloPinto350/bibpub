@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin.options import ModelAdmin
 
+from bibpub.models import Editora
 from .models import Categoria,Autor,Obra
 
 class CategoriaAdmin(ModelAdmin):
@@ -9,6 +10,7 @@ class CategoriaAdmin(ModelAdmin):
     list_per_page = 20
 
 admin.site.register(Categoria, CategoriaAdmin)
+
 
 #class AutorAdmin(ModelAdmin):
 #    list_display = ('nome','nascimento','biografia')
