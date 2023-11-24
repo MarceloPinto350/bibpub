@@ -14,7 +14,11 @@ sudo apt install openjdk-17-jdk
 
 # instalar o VS Code
 echo "PASSO 4: Instalando VS Code..."
-sudo snap install --classic code 
+if command -v code >/dev/null 2>&1; then
+	echo "VS Code instalado..."
+else
+	sudo snap install --classic code 
+fi
 
 # configurando o python
 python --version >/dev/null 2>&1
@@ -67,7 +71,7 @@ ls -al ~/.ssh/
 # Para adicionar a chave privatda ao agente: ssh-add ~/.ssh/id_rsa
 # Adicionar a chave pública no Github através da interface web do Github
 
-cd git
+cd ~/git
 git clone https://github.com/MarceloPinto350/bibpub-imd.git
 
 # final da configuração

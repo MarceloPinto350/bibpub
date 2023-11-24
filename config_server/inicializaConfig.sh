@@ -1,29 +1,31 @@
 #!/bin/bash
 
+echo ""
 echo "PASSO 1: Instalando pacotes básicos..."
 # Atualiza os pacotes apt
 sudo apt update && sudo apt upgrade -y
 
 # Instala os pacotes básicos de rede
-sudo apt-get install net-tools iputils-ping apt-transport-https ca-certificates curl software-properties-common -y
+sudo apt install net-tools iputils-ping apt-transport-https ca-certificates curl software-properties-common -y
 
 # Instalar o SSH e SSL
 sudo apt install openssh-server openssl -y
 
 # Instalar o openjdk-17
-sudo apt-get install openjdk-17-jdk -y
+sudo apt install openjdk-17-jdk -y
 
+echo ""
 echo "PASSO 2: Instalando Docker..."
 # Instala o docker
 # Adicionando a chave GPG do repositório do docker 
-if  [ sudo apt-key list | grep -i docker>/dev/null 2>%1 ]; then
+if sudo apt-key list | grep -i docker>/dev/null 2>%1; then
   echo "Chave do Docker já inclusa no Apt..."
 else
   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 fi
 
 # Configura o APT para acesso às fontes do docker (Ubuntu 22.04-Jammy)
-if  [ sudo apt-cache showpkg docker | grep -i docker-ce>/dev/null 2>%1 ]; then
+if sudo apt-cache showpkg docker | grep -i docker-ce>/dev/null 2>%1; then
   echo "Pacote Docker já incluso no repositóprio do Apt..."
 else
   sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu jammy stable"
@@ -50,6 +52,7 @@ fi
 #  mkdir /opt/pasta1
 #fi
 
+echo ""
 echo "PASSO 3: Criando o banco de dados..."
 # Criar o volume local no docker  para ser usado pelo Postgres
 if [ ! -d /var/lib/docker/volumes/postgres_data ]; then
@@ -61,9 +64,9 @@ sudo docker run -d \
   --name bibpub-postegres \
   -e POSTGRES_DB=bibpbdb \
   -e POSTGRES_USER=bibpb \
-  -e POSTGRES_PASSWORD=’@dm1n’ \
+  -e POSTGRES_PASSWORD="@dm1n" \
   -e LANG=pt_BR.UTF8 \
-  -e PGDATA=/var/lib/postgres/data \
+  -e PGDATA=/var/lib/postgresql/data \
   -p 5432:5432 \
-  -v postgres_data:/var/lib/postgres/data \
+  -v postgres_data:/var/lib/postgresql/data \
   postgres:alpine
