@@ -5,20 +5,23 @@ Este projeto de aplicação para empréstimos de livros para bibliotecas públic
 1. Alikson Oliveira
 2. Marcelo Pinto
 3. Vitor Lindbergh
-
+https://github.com/MarceloPinto350/bibpub-imd/edit/master/README.md
 ## Requisitos Funcionais
-1. A aplicação deve permitir a consulta às obras cadastradas, pelo título, autor,  através da internet a qualquer pessoa;
-2. A aplicação deve permitir que as pessoas realizem seu próprio cadastro pela internet;
-3. A aplicação deve permitir a reserva, de até 3 obras, para empréstimos a partir da internet, apenas às pessoas cadastradas e ativas;
-4. A aplicação deve enviar solicitação de confirmação de cadastro, por e-mail, com validade de até 24hs da solicitação, às pessoas que tenham realizado cadastro sem autenticação. Quando for cadastrada por um usuário autenticado, o cadastro já deverá ficar ativo;
-5. A aplicação deve aceitar a confirmação/validação de cadastro das pessoas, pelo link e chave enviada por e-mail;
-6. A aplicação deve permitir o empréstimo, de até 5 obras simultaneamente, às pessoas cadastradas e com cadastro ativo, pelo período de 30 a 90 dias, a escolha da pessoa;
-7. A aplicação deverá permitir a renovação de empréstimos, por igual período, caso não haja reserva para a obra, entre os últimos 10 dias de empréstimo atual;
-8. A aplicação não deverá possibilitar o empréstimo de obras a pessoas que possuem obra emprestada mas possui atraso na devolução;
-9. A aplicação deverá listar em sua página principal: a quantidade de obras cadastradas, as 5 obras mais emprestadas e os últimos cinco títulos cadastrados;
-10. A aplicação deverá consignar penalidades às pessoas, confrome as seguintes regras:
-    * Devolver fora do prazo do empréstimo, a pessoa ficará com a situação suspensa por 10 dias e não poderá pegar nosvas obras emprestadas;
-    * Com atraso na devolução superior a 30 dias, a pessoa ficará bloqueada, não podendo acessar o sistema até a devolução da obra em atraso;
+   PAPEIS: ADMIN, USER, OPERADOR
+1. A aplicação deve permitir que as pessoas realizem seu próprio cadastro pela internet;
+2. Ao realizar o cadastro do usuário ficará disponível para os operadores do ou adminsitradores do sistema avaliarem e aprovarem o cadastro: PENDENTE, ATIVO, SUSPENSO, BLOQUEADO
+3. A aplicação deve permitir a consulta às obras cadastradas, pelo título, autor, através da internet a qualquer usuário habilitado;
+4. A aplicação deve permitir a reserva, de até 3 obras, para empréstimos a partir da internet, apenas às pessoas cadastradas e ativas, a reserva é válida por 7 dias após a 1ª disponibiizadae de um exemplar;
+5. A aplicação deve permitir o empréstimo, de até 5 obras simultaneamente, às pessoas cadastradas e com cadastro ativo, pelo período de 30 a 90 dias, a escolha da pessoa, não podendo ter obras a empréstdas em atraso;
+6. A aplicação deverá permitir a renovação de empréstimos, por igual período, caso não haja reserva para a obra, a partir dos últimos 10 dias de empréstimo atual;
+7. As obras podem ter situação da disponibilidade alterada pelo operador ou adminsitrador: INDISPONÍVEL, USO INTERNO, DISPONÍVEL PARA EMPRÉSTIMO
+8. A aplicação deverá listar em sua página principal: a quantidade de obras cadastradas, total de empréstimos no ano corrente, as 5 obras mais emprestadas e os últimos cinco títulos cadastrados;
+9. A aplicação deverá consignar penalidades às pessoas, confrome as seguintes regras:
+    * Devolver fora do prazo do empréstimo, a pessoa ficará com a situação suspensa por 10 dias e não poderá pegar novas obras emprestadas; 
+    * Com atraso na devolução superior a 30 dias, a pessoa ficará bloqueada, não podendo acessar o sistema até a devolução da obra em atraso; (TODO: AUTOMATIZAR)
+10. O sistema deverá permitir o usuário visualizar seu histórico de empréstimos;
+11. A aplicação deve aceitar a confirmação/validação de cadastro das pessoas, pelo link e chave enviada por e-mail; (TODO:)
+12. A pesquisa de obra poderá permitir filtrar por categoria e tipo de disponibilidade; (TODO:)
 
 
 ## Estrutura de pastas do projeto
