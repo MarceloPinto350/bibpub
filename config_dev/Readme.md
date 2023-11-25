@@ -17,6 +17,16 @@ Para testar, abra o navegador na máquina e acesse a url localhost:8000
 ## Para utilizar o projeto a partir do Github
 Inicialmente crie uma máquina virtual Linux Ubuntu 22.04, ou, caso sua máquina seja Linux compatível com Ubuntu 22.04 e/ou Debian, abra o gerenciador de arquivos e crie uma pasta no home do usuário chamada git.
 
+* Abra o VS Code e adicione a pasta do projeto: **Menu Arquivo** -> **Abrir pasta**
+* Abra um terminal para o VS Code: **Terminal** -> **Novo Termional** 
+* Clique no terminal e adicione a variável de desenvolvimento, conforme segue:
+   $ python3 -m venv venv  # configura as configurações de ambiente com o venv
+   $ source venv/bin/activate # para ativar o venv - observe que irá ficar com o texto (venv) no início do prompt
+   $ python -m pip install --upgrade pip  # atualizar o pip
+   $ python -m pip install -r requirements.txt  # instala as dependências do projeto
+
+
+
 
 Em seguida crie um par de chaves para utilizar no Github, usando o seguinte comando: 
 * $ ssh-keygen -t rsa -b 4096 -C <email>

@@ -28,11 +28,11 @@ if [ $? -eq 0 ]; then
 	echo "PASSO 5: Instalando o PIP para o Python..."
 	sudo apt install python3-pip -y
 	sudo apt install pytho3.10-venv -y
-	echo "PASSO 6: Instalando o Django para o Python..."
-	sudo python -m pip install Django
-	echo "PASSO 7: Instalando o driver do Postgres para o Python..."
+	##echo "PASSO 6: Instalando o Django para o Python... (requeriments.txt)"
+	##sudo python -m pip install Django
+	#echo "PASSO 7: Instalando o driver do Postgres para o Python... (requeriments.txt)"
 	# conforme o caso, instalar os drives correspondentes ao BD a ser utilizado
-	sudo python -m pip install "psycopg[binary]"
+	#sudo python -m pip install "psycopg[binary]"
 else
 	echo "O Python não está instalado."
 	#echo "Instalando..."
