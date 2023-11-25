@@ -64,7 +64,7 @@ sudo docker run -d \
   --name bibpub-postegres \
   -e POSTGRES_DB=bibpbdb \
   -e POSTGRES_USER=bibpb \
-  -e POSTGRES_PASSWORD="@dm1n" \
+  -e POSTGRES_PASSWORD=@dm1n \
   -e LANG=pt_BR.UTF8 \
   -e PGDATA=/var/lib/postgresql/data \
   -p 5432:5432 \
