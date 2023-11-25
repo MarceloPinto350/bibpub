@@ -143,9 +143,9 @@ class Obra(models.Model):
     tipo  = models.CharField("Tipo de obra", max_length=10, null=False, choices=TipoObra.choices)
     datacadastro = models.DateTimeField("Data de registro da obra",auto_now_add=True,null=False,db_index=True)
     dataatualizacao = models.DateTimeField("Data de modificação no registro da obra",auto_now_add=True,null=False)
-    categoria = models.ForeignKey (Categoria,on_delete=models.CASCADE,null=False)
-    autor =  models.ForeignKey (Autor,on_delete=models.CASCADE,null=False)
-    editora = models.ForeignKey (Editora,on_delete=models.CASCADE,null=False)
+    categoria = models.ForeignKey (Categoria, verbose_name=_("Categoria"), on_delete=models.CASCADE,null=False)
+    autor =  models.ForeignKey (Autor, verbose_name=_("Autor"), on_delete=models.CASCADE,null=False)
+    editora = models.ForeignKey (Editora, verbose_name=_("Editora"), on_delete=models.CASCADE,null=False)
     
     def __str__(self):
         return self.titulo    
@@ -178,7 +178,7 @@ class Unidade (models.Model):
     datainclusao = models.DateTimeField("Data de inclusão da unidade da obra",auto_now_add=True,null=False)
      
     def __str__(self):
-        return self.obra + " - " + disponibilidade
+        return f"{self.obra.titulo} - {self.disponibilidade}"
     
     def get_absolute_url(self):
         return reverse ("unidade",args=[str(self.id)]) 
@@ -203,7 +203,7 @@ class Unidade (models.Model):
 
 # Definição do modelo de Emprestimo
 class Emprestimo(models.Model):
-    pessoa = models.ForeignKey (Pessoa,on_delete=models.CASCADE,)
+    pessoa = models.ForeignKey (Pessoa, verbose_name=_("Pessoa"), on_delete=models.CASCADE,)
     obras = models.ManyToManyField (Obra)
     #usuario = models.ForeignKey (User,on_delete=models.CASCADE,)
     #usuario = models.ForeignKey ("Usuário que relaizou o empréstimo",models.CharField,null=False)
@@ -227,18 +227,27 @@ class Emprestimo(models.Model):
 
 # Definição do modelo de Reserva
 class Reserva(models.Model):
-    pessoa = models.models.ForeignKey(Pessoa, on_delete=models.CASCADE,)
-    obra = models.CharField("Título da obra reservada", max_length=200, null=False)
+    SituacaoReserva = models.TextChoices("Situação reserva","ATIVA CANCELADA EXPIRADA")
+    pessoa = models.models.ForeignKey(Pessoa, verbose_name=_("Pessoa"), on_delete=models.CASCADE,)
+    obra = models.models.ManyToManyField(Obra, verbose_name=_("Obra"))
+    situacaoreserva = models.CharField(max_length = 10, default="ATIVA", null=False)
     datareserva = models.DateTimeField ("Data da reserva",auto_now_add=True, null=False)
-#    
-#    # retornar o valor padrão para a classe
-#    def __str__(self):
-#        return f"{self.nome} - {self.descricao}"
-# 
-#    # define o nome padrão da tabela a ser criada no BD
-#    class Meta:
-#        db_table = "tb_papel"
-
+    
+    # retornar o valor padrão para a classe
+    def __str__(self):
+        return f"{self.pessoa.nome} - {self.obra.titulo}: {self.datareserva} - {self.situacaoreserva}"
+ 
+    # define o nome padrão da tabela a ser criada no BD
+    class Meta:
+        db_table = "tb_reserva"
+        verbose_name = "Reserva"
+        verbose_name_plural = "Reservas"
+        permissions = [
+            ("can_view_reserva", "Can view reservas"),
+            ("can_change_reserva", "Can change reservas"),
+            ("can_add_reserva", "Can add reservas"),
+            ("can_delete_reserva", "Can delete reservas"),
+        ]
 
 # Definição do modelo de papel
 #class Papel(models.Model):
