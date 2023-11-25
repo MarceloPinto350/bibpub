@@ -5,7 +5,7 @@ Este projeto de aplicação para empréstimos de livros para bibliotecas públic
 1. Alikson Oliveira
 2. Marcelo Pinto
 3. Vitor Lindbergh
-https://github.com/MarceloPinto350/bibpub-imd/edit/master/README.md
+
 ## Requisitos Funcionais
    PAPEIS: ADMIN, USER, OPERADOR
 1. A aplicação deve permitir que as pessoas realizem seu próprio cadastro pela internet;

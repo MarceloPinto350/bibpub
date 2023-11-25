@@ -18,7 +18,7 @@ Para testar, abra o navegador na máquina e acesse a url localhost:8000
 Inicialmente crie uma máquina virtual Linux Ubuntu 22.04, ou, caso sua máquina seja Linux compatível com Ubuntu 22.04 e/ou Debian, abra o gerenciador de arquivos e crie uma pasta no home do usuário chamada git.
 
 * Abra o VS Code e adicione a pasta do projeto: **Menu Arquivo** -> **Abrir pasta**
-* Abra um terminal para o VS Code: **Terminal** -> **Novo Termional** 
+* Abra um terminal para o VS Code: **Terminal** -> **Novo Terminal** 
 * Clique no terminal e adicione a variável de desenvolvimento, conforme segue:
    $ python3 -m venv venv  # configura as configurações de ambiente com o venv
    $ source venv/bin/activate # para ativar o venv - observe que irá ficar com o texto (venv) no início do prompt
@@ -26,7 +26,28 @@ Inicialmente crie uma máquina virtual Linux Ubuntu 22.04, ou, caso sua máquina
    $ python -m pip install -r requirements.txt  # instala as dependências do projeto
 
 
+### Fazer a migração dos modelos para o BD
+O comando verifica as aplicações configuradas no settings.py e aplica a criação das tabelas de banco de dados necessárias, conforme a configuração do arquivo referenciado e o banco de dados em uso.
+   $ python manage.py migrate
 
+Outro comando importante, relacionado à migração, pois grava uma migração a ser aplicada futuramente com o comando acima, conforme o exemplo para o caso específico desta aplicação:
+   $ python manage.py makemigrations bibpub
+
+ O comando abaixo mostra o scrpt SQL para geração das tabelas indicadas na release do migrations criado, conforme exemplo:
+   $ python manage.py sqlmigrate bibpub 0001
+
+
+### Criar o usuário adminsitrador para o Django
+Para criação do usuário adminsitrador do Django é necessário utilizar o comando abaixo:
+   $ python manage.py createsuperuser
+
+* Informe nome do usuário: admin
+* Informe o e-mail do usuario: admin@bibpub.com
+* Informe e confirme a senha: @dm1n
+
+### Iniciar o servidor de desenvolvimento
+Para iniciar e testar a aplicação está executando rode o comando abaixo, observando que a porta 8000 não poderá estar em uso por outra aplicação:
+   $ python manage.py runserver 0.0.0.0:8000
 
 Em seguida crie um par de chaves para utilizar no Github, usando o seguinte comando: 
 * $ ssh-keygen -t rsa -b 4096 -C <email>

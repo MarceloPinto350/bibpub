@@ -139,13 +139,13 @@ class Obra(models.Model):
     edicao  = models.PositiveSmallIntegerField("Número da edição da obra", default=1, null=False)
     isbn  = models.CharField('Número do ISBN da obra', max_length=20, null=True, blank=True)   # se for livro
     issn  = models.CharField('Número do ISSN da obra', max_length=20, null=True, blank=True)   # se for periódico
-    quantidade = models.models.PositiveSmallIntegerField('Quantidade de unidades', default=1, null=false)
+    quantidade = models.PositiveSmallIntegerField('Quantidade de unidades', default=1, null=False)
     tipo  = models.CharField("Tipo de obra", max_length=10, null=False, choices=TipoObra.choices)
     datacadastro = models.DateTimeField("Data de registro da obra",auto_now_add=True,null=False,db_index=True)
     dataatualizacao = models.DateTimeField("Data de modificação no registro da obra",auto_now_add=True,null=False)
-    categoria = models.ForeignKey (Categoria, verbose_name=_("Categoria"), on_delete=models.CASCADE,null=False)
-    autor =  models.ForeignKey (Autor, verbose_name=_("Autor"), on_delete=models.CASCADE,null=False)
-    editora = models.ForeignKey (Editora, verbose_name=_("Editora"), on_delete=models.CASCADE,null=False)
+    categoria = models.ForeignKey (Categoria, verbose_name=("Categoria"), on_delete=models.CASCADE,null=False)
+    autor =  models.ForeignKey (Autor, verbose_name=("Autor"), on_delete=models.CASCADE,null=False)
+    editora = models.ForeignKey (Editora, verbose_name=("Editora"), on_delete=models.CASCADE,null=False)
     
     def __str__(self):
         return self.titulo    
@@ -173,7 +173,7 @@ class Obra(models.Model):
 # Definição do modelo de Unidade (de obra)
 class Unidade (models.Model):
     TipoDisponibilidade = models.TextChoices("Tipo disponibilidade","INTERNO INDISPONÍVEL EMPRÉSTIMO")
-    obra = models.ForeignKey(Obra, verbose_name=_("Obra"), on_delete=models.CASCADE)
+    obra = models.ForeignKey(Obra, verbose_name=("Obra"), on_delete=models.CASCADE)
     disponibilidade = models.CharField(max_length = 15, null=False, choices=TipoDisponibilidade.choices)
     datainclusao = models.DateTimeField("Data de inclusão da unidade da obra",auto_now_add=True,null=False)
      
@@ -203,7 +203,7 @@ class Unidade (models.Model):
 
 # Definição do modelo de Emprestimo
 class Emprestimo(models.Model):
-    pessoa = models.ForeignKey (Pessoa, verbose_name=_("Pessoa"), on_delete=models.CASCADE,)
+    pessoa = models.ForeignKey (Pessoa, verbose_name=("Pessoa"), on_delete=models.CASCADE,)
     obras = models.ManyToManyField (Obra)
     #usuario = models.ForeignKey (User,on_delete=models.CASCADE,)
     #usuario = models.ForeignKey ("Usuário que relaizou o empréstimo",models.CharField,null=False)
@@ -228,8 +228,8 @@ class Emprestimo(models.Model):
 # Definição do modelo de Reserva
 class Reserva(models.Model):
     SituacaoReserva = models.TextChoices("Situação reserva","ATIVA CANCELADA EXPIRADA")
-    pessoa = models.models.ForeignKey(Pessoa, verbose_name=_("Pessoa"), on_delete=models.CASCADE,)
-    obra = models.models.ManyToManyField(Obra, verbose_name=_("Obra"))
+    pessoa = models.ForeignKey(Pessoa, verbose_name=("Pessoa"), on_delete=models.CASCADE,)
+    obra = models.ManyToManyField(Obra, verbose_name=("Obra"))
     situacaoreserva = models.CharField(max_length = 10, default="ATIVA", null=False)
     datareserva = models.DateTimeField ("Data da reserva",auto_now_add=True, null=False)
     

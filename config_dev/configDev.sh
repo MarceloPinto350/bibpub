@@ -43,6 +43,14 @@ else
         #sudo python -m pip install Django
 fi
 
+# Instalar o Postman para testar a aplicação
+echo "PASSO 6: Instalando o Postman..."
+if command -v postman>/dev/null 2>&1; then
+	echo "Postman já está instalado..."
+else
+	sudo snap install postman
+fi
+
 # Instalar o dbeaver para gerenciamento do banco de dados
 echo "PASSO 8: Instalando o DBeaver para gerenciar banco de dados..."
 sudo snap install dbeaver-ce
