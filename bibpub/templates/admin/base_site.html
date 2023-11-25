@@ -1,0 +1,37 @@
+{% extends "admin/base_site.html" %}
+
+{% block title %}Painel Administrativo{% endblock %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <style>
+        body {
+            background-color: #ecf0f1;
+            color: #333;
+        }
+
+        .module h2, .module caption {
+            background: #3498db;
+        }
+
+        #branding h1, #branding h2 {
+            color: #fff;
+        }
+
+        .app-list {
+            background: #3498db;
+        }
+
+        .breadcrumbs {
+            background: #3498db;
+        }
+
+        #content {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+{% endblock %}
