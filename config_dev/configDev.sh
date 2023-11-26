@@ -14,7 +14,11 @@ sudo apt install openjdk-17-jdk
 
 # instalar o VS Code
 echo "PASSO 4: Instalando VS Code..."
-sudo snap install --classic code 
+if command -v code >/dev/null 2>&1; then
+	echo "VS Code instalado..."
+else
+	sudo snap install --classic code 
+fi
 
 # configurando o python
 python --version >/dev/null 2>&1
@@ -24,11 +28,11 @@ if [ $? -eq 0 ]; then
 	echo "PASSO 5: Instalando o PIP para o Python..."
 	sudo apt install python3-pip -y
 	sudo apt install pytho3.10-venv -y
-	echo "PASSO 6: Instalando o Django para o Python..."
-	sudo python -m pip install Django
-	echo "PASSO 7: Instalando o driver do Postgres para o Python..."
+	##echo "PASSO 6: Instalando o Django para o Python... (requeriments.txt)"
+	##sudo python -m pip install Django
+	#echo "PASSO 7: Instalando o driver do Postgres para o Python... (requeriments.txt)"
 	# conforme o caso, instalar os drives correspondentes ao BD a ser utilizado
-	sudo python -m pip install "psycopg[binary]"
+	#sudo python -m pip install "psycopg[binary]"
 else
 	echo "O Python não está instalado."
 	#echo "Instalando..."
@@ -37,6 +41,14 @@ else
 	#sudo apt install python3-pip
 	#instalando o Django
         #sudo python -m pip install Django
+fi
+
+# Instalar o Postman para testar a aplicação
+echo "PASSO 6: Instalando o Postman..."
+if command -v postman>/dev/null 2>&1; then
+	echo "Postman já está instalado..."
+else
+	sudo snap install postman
 fi
 
 # Instalar o dbeaver para gerenciamento do banco de dados
@@ -67,7 +79,7 @@ ls -al ~/.ssh/
 # Para adicionar a chave privatda ao agente: ssh-add ~/.ssh/id_rsa
 # Adicionar a chave pública no Github através da interface web do Github
 
-cd git
+cd ~/git
 git clone https://github.com/MarceloPinto350/bibpub-imd.git
 
 # final da configuração

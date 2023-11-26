@@ -18,21 +18,24 @@ class CategoriaAdmin(ModelAdmin):
     
 admin.site.register(Categoria, CategoriaAdmin)
 
+# registando o Autor
+class AutorAdmin(ModelAdmin):
+    list_display = ('nome','nascimento','biografia')
+    list_display_icons = True
+    list_per_page = 20
+
+admin.site.register(Autor,AutorAdmin)
+
+# registrando a Obra
+class ObraAdmin(ModelAdmin):
+    #categoria = models.ForeignKey 
+    #autor =  models.ForeignKey 
+    #editora = models.ForeignKey
+    list_display = ('titulo','anopublicacao','edicao','tipo','quantidade','datacadastro')
+    list_display_icons = True
+    list_per_page = 20
+
+admin.site.register(Obra,ObraAdmin)
+
 admin.site.register(User)
 admin.site.register(Group)
-#class AutorAdmin(ModelAdmin):
-#    list_display = ('nome','nascimento','biografia')
-#    list_display_icons = True
-#    list_per_page = 20
-
-#admin.site.register(Autor,AutorAdmin)
-
-#class ObraAdmin(ModelAdmin):
-#    #categoria = models.ForeignKey 
-#    #autor =  models.ForeignKey 
-#    #editora = models.ForeignKey
-#    list_display = ('titulo','anopublicacao','edicao','tipo','isbn','issn','datacadastro')
-#    list_display_icons = True
-#    list_per_page = 20
-
-#admin.site.register(Obra,ObraAdmin)

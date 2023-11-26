@@ -62,13 +62,13 @@ ROOT_URLCONF = "bibpub.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
-                "django.contrib.auth.contexta_processors.auth",
+                "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
         },
@@ -91,7 +91,7 @@ WSGI_APPLICATION = "bibpub.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'bibpub',
+        'NAME': 'bibpubdb',
         'USER': 'bibpub',
         'PASSWORD': '@dm1n',
         'HOST': '172.17.0.3',

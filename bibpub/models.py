@@ -39,9 +39,10 @@ class Pessoa (models.Model):
         (7,"Outra"),
         (8,"Não informado"),
     ]
+    
     Estados = models.TextChoices("Estados","AC AL AP AM BA CE DF ES GO MA MT MS MG PA PB PR PE PI RJ RO RR SC SP SE TO")
-    OrigemCadastro = models.TextChoices("Origem cadastro" ,"Internet Aplicação")
-    SituacaoCadastro = models.TextChoices("Situação cadastro","Ativo Pendente Suspenso Cancelado")
+    OrigemCadastro = models.TextChoices("Origem cadastro" ,"INTERNET APLICAÇÃO")
+    SituacaoCadastro = models.TextChoices("Situação cadastro","ATIVO PENDENTE SUSPENSO BLOQUEADO")
     #id = models.BigAutoField(primary_key=True)
     nome = models.CharField("Nome", max_length=200, null=False,db_index=True)
     nascimento = models.DateField("Data nascimento")
@@ -64,8 +65,8 @@ class Pessoa (models.Model):
     cidade = models.CharField("Cidade", max_length=200, null=False)
     uf = models.CharField("Unidade da federação", max_length=2, null=False, choices=Estados.choices)
     cadastro = models.DateTimeField ("Data do cadastro",auto_now_add=True)
-    origem = models.CharField("Origem do cadastro da pessoa", max_length=10, null=False, choices=OrigemCadastro.choices)
-    situacaocadastro = models.CharField("Situação do cadastro da pessoa", max_length=10, null=False, choices=SituacaoCadastro.choices)
+    origem = models.CharField("Origem do cadastro da pessoa", max_length=10, null=False, default="PENDENTE", choices=OrigemCadastro.choices)
+    situacaocadastro = models.CharField("Situação do cadastro da pessoa", max_length=10, null=False, default="INTERNET", choices=SituacaoCadastro.choices)
     
     # retornar o valor padrão para a classe
     def __str__(self):
@@ -131,18 +132,20 @@ class Editora(models.Model):
 
 # Definição do modelo de Obra
 class Obra(models.Model):
-    TipoObra = models.TextChoices("Tipo de obra" ,"Livro Periódico Jornal Outro")
-    titulo = models.CharField("Título da obra", max_length=200, null=False, unique=True,db_index=True)
+    TipoObra = models.TextChoices("Tipo de obra" ,"LIVRO PERIÓDICO JORNAL REVISTA")
+    titulo = models.CharField("Título da obra", max_length=200, null=False, unique=True, db_index=True)
     anopublicacao = models.PositiveSmallIntegerField("Ano de publicação da obra", null=False)
     # criar validação para o maior valor ser o ano corrente e o menor 100
     edicao  = models.PositiveSmallIntegerField("Número da edição da obra", default=1, null=False)
     isbn  = models.CharField('Número do ISBN da obra', max_length=20, null=True, blank=True)   # se for livro
     issn  = models.CharField('Número do ISSN da obra', max_length=20, null=True, blank=True)   # se for periódico
+    quantidade = models.PositiveSmallIntegerField('Quantidade de unidades', default=1, null=False)
     tipo  = models.CharField("Tipo de obra", max_length=10, null=False, choices=TipoObra.choices)
     datacadastro = models.DateTimeField("Data de registro da obra",auto_now_add=True,null=False,db_index=True)
-    categoria = models.ForeignKey (Categoria,on_delete=models.CASCADE,null=False)
-    autor =  models.ForeignKey (Autor,on_delete=models.CASCADE,null=False)
-    editora = models.ForeignKey (Editora,on_delete=models.CASCADE,null=False)
+    dataatualizacao = models.DateTimeField("Data de modificação no registro da obra",auto_now_add=True,null=False)
+    categoria = models.ForeignKey (Categoria, verbose_name=("Categoria"), on_delete=models.CASCADE,null=False)
+    autor =  models.ForeignKey (Autor, verbose_name=("Autor"), on_delete=models.CASCADE,null=False)
+    editora = models.ForeignKey (Editora, verbose_name=("Editora"), on_delete=models.CASCADE,null=False)
     
     def __str__(self):
         return self.titulo    
@@ -167,14 +170,44 @@ class Obra(models.Model):
             ("can_delete_obra", "Can delete obras"),
         ]
 
+# Definição do modelo de Unidade (de obra)
+class Unidade (models.Model):
+    TipoDisponibilidade = models.TextChoices("Tipo disponibilidade","INTERNO INDISPONÍVEL EMPRÉSTIMO")
+    obra = models.ForeignKey(Obra, verbose_name=("Obra"), on_delete=models.CASCADE)
+    disponibilidade = models.CharField(max_length = 15, null=False, choices=TipoDisponibilidade.choices)
+    datainclusao = models.DateTimeField("Data de inclusão da unidade da obra",auto_now_add=True,null=False)
+     
+    def __str__(self):
+        return f"{self.obra.titulo} - {self.disponibilidade}"
+    
+    def get_absolute_url(self):
+        return reverse ("unidade",args=[str(self.id)]) 
+    
+    def mostra_obra(self):
+        return ', '.join(obra.titulo for obra in self.obra.all()[:1])
+    mostra_obra.short_description = "Obra"
+        
+    # define as configurações da classe Meta (dados de BD)
+    class Meta:
+        db_table = "tb_unidade"
+        ordering = ["disponibilidade","-datainclusao"] # traz por padrão os registros ordenados pelo disponibilidade e data de inclusão decrescente
+        verbose_name = 'Unidade'
+        verbose_name_plural = 'Unidades'
+        permissions = [
+            ("can_view_unidade", "Can view unidades"),
+            ("can_change_unidade", "Can change unidades"),
+            ("can_add_unidade", "Can add unidades"),
+            ("can_delete_unidade", "Can delete unidades"),
+        ]
+
 
 # Definição do modelo de Emprestimo
 class Emprestimo(models.Model):
-    pessoa = models.ForeignKey (Pessoa,on_delete=models.CASCADE,)
+    pessoa = models.ForeignKey (Pessoa, verbose_name=("Pessoa"), on_delete=models.CASCADE,)
     obras = models.ManyToManyField (Obra)
     #usuario = models.ForeignKey (User,on_delete=models.CASCADE,)
     #usuario = models.ForeignKey ("Usuário que relaizou o empréstimo",models.CharField,null=False)
-    data_emprest = models.DateTimeField ("Data do empréstimos",auto_now_add=True, null=False)
+    dataemprest = models.DateTimeField ("Data do empréstimos",auto_now_add=True, null=False)
     prazo = models.PositiveSmallIntegerField("Prazo do empréstimo em dias", default=10)
     # criar regra de validação para os prazos entre min=10, max=90
     data_devol = models.DateTimeField("Data da efetiva devolução", null=True)
@@ -192,6 +225,29 @@ class Emprestimo(models.Model):
         ]
 
 
+# Definição do modelo de Reserva
+class Reserva(models.Model):
+    SituacaoReserva = models.TextChoices("Situação reserva","ATIVA CANCELADA EXPIRADA")
+    pessoa = models.ForeignKey(Pessoa, verbose_name=("Pessoa"), on_delete=models.CASCADE,)
+    obra = models.ManyToManyField(Obra, verbose_name=("Obra"))
+    situacaoreserva = models.CharField(max_length = 10, default="ATIVA", null=False)
+    datareserva = models.DateTimeField ("Data da reserva",auto_now_add=True, null=False)
+    
+    # retornar o valor padrão para a classe
+    def __str__(self):
+        return f"{self.pessoa.nome} - {self.obra.titulo}: {self.datareserva} - {self.situacaoreserva}"
+ 
+    # define o nome padrão da tabela a ser criada no BD
+    class Meta:
+        db_table = "tb_reserva"
+        verbose_name = "Reserva"
+        verbose_name_plural = "Reservas"
+        permissions = [
+            ("can_view_reserva", "Can view reservas"),
+            ("can_change_reserva", "Can change reservas"),
+            ("can_add_reserva", "Can add reservas"),
+            ("can_delete_reserva", "Can delete reservas"),
+        ]
 
 # Definição do modelo de papel
 #class Papel(models.Model):
