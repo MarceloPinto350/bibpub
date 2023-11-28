@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin.options import ModelAdmin
 from django.contrib.auth.models import User, Group
-from .models import Categoria, Autor, Obra
+from .models import Categoria, Autor, Obra, Unidade, Pais, Editora
 
 
 class CustomAdminSite(admin.AdminSite):
@@ -23,23 +23,39 @@ class AutorAdmin(ModelAdmin):
     list_display = ('nome','nascimento','biografia')
     list_display_icons = True
     list_per_page = 20
-
 admin.site.register(Autor,AutorAdmin)
 
+#registrando a Editora
+class EditoraAdmin(ModelAdmin):
+    list_display = ('nome','email',) # 'pais',)
+    list_display_icons = True
+    list_per_page = 20
+admin.site.register(Editora,EditoraAdmin)   
+
 # registrando a Obra
+class UnidadeEmLinha(admin.TabularInline):
+    model = Unidade 
+    extra = 2
+
 class ObraAdmin(ModelAdmin):
-    #categoria = models.ForeignKey 
-    #autor =  models.ForeignKey 
-    #editora = models.ForeignKey
-    list_display = ('titulo', 'anopublicacao', 'edicao', 'tipo', 'quantidade', 'datacadastro')
+    list_display = ('titulo', 'anopublicacao', 'tipo', 'datacadastro', 'descricao',) #, 'mostra_categoria', 'mostra_autor')
     list_filter = ('titulo', 'autor')
     search_fields = ['titulo', 'autor__nome']
+    inlines = [UnidadeEmLinha]
     list_display_icons = True
     list_per_page = 20
 
     def has_view_permission(self, request, obj=None):
         return True
 admin.site.register(Obra,ObraAdmin)
+
+# registrando o Pais
+class PaisAdmin(ModelAdmin):
+    list_display = ('codigo','nome','datainicial','datafinal',)
+    list_display_icons = True
+    list_per_page = 20
+admin.site.register(Pais,PaisAdmin)    
+
 
 admin.site.register(User)
 admin.site.register(Group)

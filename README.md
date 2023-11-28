@@ -40,15 +40,21 @@ Contem o código fonte da aplicação propriamente dita
 
 ### OBRA
 * titulo: character (200), NOT NULL
-* anopublicacao: integer, NOT NULL,  validação: 0 < valores >= ano_corrente
-* edicao: integer, NOT NULL
+* anopublicacao: integer, NOT NULL,  validação: 100 < valores >= ano_corrente
+* descricao: varchar(4000), NULL
 * isbn: varchar(20), composto de 13 dígitos, NULL
 * issn: varchar(20), composto de 8 dígitos, NULL
-* tipo: varchar (10), NOT NULL
+* tipo: varchar (10), NOT NULL, sendo possível un dos valores: "LIVRO"|"PERIÓDICO"|"JORNAL"|"REVISTA"
 * categoria_id: FK -> CATEGORIA, NOT NULL
 * autor_id: FK - AUTOR, NOT NULL
 * editora_id: FK - EDITORA, NOT NULL
 * datacadastro: datetime, NOT NULL
+
+### UNIDADE
+* obra_id: FK - OBRA, NOT NULL
+* disponibilidade: varchar(15), NOT NULL, sendo possível um dos valores: "INTERNO"|"INDISPONÍVEL"|"EMPRÉSTIMO"
+* edicao: integer, NOT NULL
+* datainclusao: datetime, NOT NULL
 
 ### AUTOR
 * nome: character (200), NOT NULL
@@ -61,7 +67,7 @@ Contem o código fonte da aplicação propriamente dita
 ### EDITORA
 * nome: character (200), NOT NULL
 * e_mail: character (254), validação: email válido
-* pais: varchar(100)opção: Lista de países a selecionar
+* pais: FK - PAIS, NOT NULL
 
 ### PESSOA
 * nome: character (200), NOT NULL
@@ -89,11 +95,17 @@ Contem o código fonte da aplicação propriamente dita
 * dt_fim: date, NULL
 
 ### EMPRESTIMO	
-* pesso_id: FK -> PESSOA, NOT NULL
-* data_emprest: date, NOT NULL
-* prazo: integer NOT NULL, validação: 5 < valor < 60
-* data_devol:	date, NULL
+* pessoa_id: FK -> PESSOA, NOT NULL
+* dataemprest: date, NOT NULL
+* prazo: integer NOT NULL, validação: 30 < valor < 90
+* data_devol: date, NULL
 
 ### EMPRESTIMO_OBRAS
 * emprestimo_id, FK -> EMPRESTIMO, NOT NULL
 * obra_id, FK -> OBRA, NOT NULL
+
+### PAIS
+* codigo: varchar(2), NOT NULL
+* nome: varchar(150), NOT NULL
+* datainicial: date, NOT NULL
+* datafinal: date, NULL
