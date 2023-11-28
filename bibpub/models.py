@@ -41,7 +41,23 @@ class Categoria(models.Model):
         ]
 
 # Criação do modelo Pessoa
-class Pessoa (models.Model):   
+class Pessoa(models.Model):  
+    OPC_SEXO = [
+        ("M","Masculino"),
+        ("F","Feminino"),
+        ("I","Intersexo"),
+        ("N","Não informado"),
+    ]
+    OPC_GENERO = [
+        (1,"Cisgênero"),
+        (2,"Transgênero"),
+        (3,"Transexual"),
+        (4,"Travesti"),
+        (5,"Gênero fluido"),
+        (6,"Agênero"),
+        (7,"Outra"),
+        (8,"Não informado"),
+    ]
     Estados = models.TextChoices("Estados","AC AL AP AM BA CE DF ES GO MA MT MS MG PA PB PR PE PI RJ RO RR SC SP SE TO")
     OrigemCadastro = models.TextChoices("Origem cadastro" ,"INTERNET APLICAÇÃO")
     SituacaoCadastro = models.TextChoices("Situação cadastro","ATIVO PENDENTE SUSPENSO BLOQUEADO")

@@ -19,14 +19,21 @@ from django.urls import path
 
 from . import views
 
+urlpatterns = [
+    path('login/', LoginView.as_view(), name='login'),
+    path ("",views.index, name="index"),
+    # path ("obra/<int:obra_id>/", views.obra,name="obra"),    #visualiza
+    # pessoa
+    path("pessoa/", views.list_pessoa_view, name="list_pessoa_view"),
+    path("pessoa/criar/", views.create_pessoa_view, name="create_pessoa_view"),
+    path("pessoa/<int:pessoa_id>/", views.detail_pessoa_view, name="detail_pessoa_view"),
+    path("pessoa/<int:pessoa_id>/update/", views.update_pessoa_view, name="update_pessoa_view"),
+    path("pessoa/<int:pessoa_id>/delete/", views.delete_pessoa_view, name="delete_pessoa_view"),
+    # admin
+    path("admin/", admin.site.urls),
+
 admin.site.site_header = 'Biblioteca Pública'
 admin.site.site_title = 'Biblioteca Pública'
 admin.site.index_title = 'Bem-vindo ao Painel Administrativo'
 
-urlpatterns = [
-    path('login/', LoginView.as_view(), name='login'),
-    path ("",views.index, name="index"),
-    #path ("obra/<int:obra_id>/", views.obra,name="obra"),    #visualiza
-    path ("admin/", admin.site.urls),
 ]
-

@@ -93,9 +93,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'bibpubdb',
         'USER': 'bibpub',
-        'PASSWORD': '@dm1n',
-        'HOST': '172.17.0.3',
-        'PORT': '5432',
+        'PASSWORD': 'bibpub',
+        'HOST': 'localhost',
+        'PORT': '5432'
     }
 }
 

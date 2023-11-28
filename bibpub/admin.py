@@ -1,7 +1,9 @@
 from django.contrib import admin
 from django.contrib.admin.options import ModelAdmin
 from django.contrib.auth.models import User, Group
-from .models import Categoria, Autor, Obra, Unidade, Pais, Editora
+from .models import Categoria, Autor, Obra, Unidade, Pais, Editora, Pessoa
+
+from bibpub.models import Editora
 
 
 class CustomAdminSite(admin.AdminSite):
@@ -56,6 +58,19 @@ class PaisAdmin(ModelAdmin):
     list_per_page = 20
 admin.site.register(Pais,PaisAdmin)    
 
+admin.site.register(Editora, EditoraAdmin)
+
+class PessoaAdmin(ModelAdmin):
+    list_display = ('OPC_SEXO', 'OPC_GENERO', 'Estados', 
+                    'OrigemCadastro', 'SituacaoCadastro',
+                    'nome', 'nascimento', 'cpf', 'sexo', 
+                    'genero', 'eMail', 'cep', 'endereco',
+                    'cidade', 'uf', 'cadastro', 'origem',
+                    'situacaocadastro')
+    list_display_icons = True
+    list_per_page = 20
+
+admin.site.register(Pessoa, PessoaAdmin)
 
 admin.site.register(User)
 admin.site.register(Group)

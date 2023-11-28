@@ -1,7 +1,10 @@
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.views import LoginView
+from .models import Pessoa
+from .forms import PessoaForm
 
 # imports para uso dos modelos e templates criados
 from django.template import loader
@@ -33,4 +36,34 @@ def obra(request,obra_id):
         raise Http404("Obra não está cadastrada.")
     return render(request,"obra.html",{"obra":obra})
 
+# CRUD Pessoa
+def create_pessoa_view(request):
+    form = PessoaForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('list_view')
+    return render(request, 'pessoa_form.html', {'form': form})
 
+def list_pessoa_view(request):
+    items = Pessoa.objects.all()
+    return render(request, 'pessoa_list.html', {'items': items})
+
+def detail_pessoa_view(request, pessoa_id):
+    item = get_object_or_404(Pessoa, id=pessoa_id)
+    fields = [(field.name, field.value_to_string(item)) for field in item._meta.fields]
+    return render(request, 'pessoa_detail.html', {'item': item})
+
+def update_pessoa_view(request, pessoa_id):
+    item = get_object_or_404(Pessoa, id=pessoa_id)
+    form = PessoaForm(request.POST or None, instance=item)
+    if form.is_valid():
+        form.save()
+        return redirect('pessoa_list_view')
+    return render(request, 'pessoa_form.html', {'form': form, 'item': item})
+
+def delete_pessoa_view(request, pessoa_id):
+    item = get_object_or_404(Pessoa, id=pessoa_id)
+    if request.method == 'POST':
+        item.delete()
+        return redirect('pessoa_list_view')
+    return render(request, 'pessoa_delete_confirm.html', {'item': item})
