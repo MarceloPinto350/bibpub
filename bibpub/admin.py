@@ -31,10 +31,14 @@ class ObraAdmin(ModelAdmin):
     #categoria = models.ForeignKey 
     #autor =  models.ForeignKey 
     #editora = models.ForeignKey
-    list_display = ('titulo','anopublicacao','edicao','tipo','quantidade','datacadastro')
+    list_display = ('titulo', 'anopublicacao', 'edicao', 'tipo', 'quantidade', 'datacadastro')
+    list_filter = ('titulo', 'autor')
+    search_fields = ['titulo', 'autor__nome']
     list_display_icons = True
     list_per_page = 20
 
+    def has_view_permission(self, request, obj=None):
+        return True
 admin.site.register(Obra,ObraAdmin)
 
 admin.site.register(User)
