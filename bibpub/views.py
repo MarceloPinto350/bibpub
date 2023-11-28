@@ -11,10 +11,12 @@ from .models import Obra
 
 @login_required()
 def index(request):
-    ultimas_obras_list = Obra.objects.order_by ("-datacadastro")[:5] 
+    ultimas_obras_list = Obra.objects.order_by ("-datacadastro")[:5]
+    quantidade_obras = Obra.objects.count()
     template = loader.get_template("index.html")
     context = {
         "ultimas_obras_list":ultimas_obras_list,
+        "quantidade_obras": quantidade_obras,
     }
     return HttpResponse (template.render(context,request))
 
