@@ -1,11 +1,189 @@
-<h1>Últimas cinco obras registradas</h1>
-<p></p>
-{% if ultimas_obras_list %}
-    <ul>
-        {% for obras in ultimas_obras_list %}
-            <li><a href="{% url 'index' obra.id }">{{ obra.titulo }}</a></li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>Nenhuma obra cadastrada.</p>
-{% endif %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Biblioteca Pública</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #3498db;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+        .menu {
+            background-color: #ecf0f1;
+            padding: 15px;
+        }
+
+        .menu ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .menu li {
+            display: inline;
+            margin-right: 15px;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: #3498db;
+            font-weight: bold;
+        }
+
+        .menu a:hover {
+            color: #2980b9;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .info-box {
+            background-color: #ecf0f1;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .info-box h2 {
+            color: #3498db;
+        }
+
+        .large-button {
+            background-color: #3498db;
+            color: #fff;
+            font-size: 18px;
+            padding: 15px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .large-button:hover {
+            background-color: #2980b9;
+        }
+
+        .content {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .flex-container {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .box-item {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            width: 200px;
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease-in-out;
+            background-color: #ecf0f1;
+        }
+
+        .box-item:hover {
+            transform: scale(1.05);
+        }
+
+        .indicator {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            color: #3498db;
+        }
+
+        .description {
+            font-size: 16px;
+            color: #555;
+            text-align: center;
+        }
+        .latest-works {
+        margin-top: 20px;
+        margin-left: 20px;
+        margin-right: 20px;s
+        }
+
+        .latest-works h2 {
+            color: #3498db;
+        }
+
+        .latest-works ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .latest-works li {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+        .latest-works h3 {
+            color: #3498db;
+            margin-bottom: 5px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Biblioteca Pública</h1>
+    </div>
+
+    <div class="menu">
+        <ul>
+            <li><a href="#">Página Inicial</a></li>
+            <li><a href="/admin/bibpub/categoria/">Categoria</a></li>
+            <li><a href="/admin/bibpub/obra/">Obra</a></li>
+        </ul>
+    </div>
+
+    <div class="content">
+        <div class="flex-container">
+        <div class="box-item">
+            <p class="indicator">{{ quantidade_obras }}</p>
+            <p class="description">obras cadastradas</p>
+        </div>
+        </div>
+        <ul class="flex-container indicators CLASS_INDICATOR">
+            <li class="box-item OPTIONAL_CLASS_CHILD">
+                <p class="indicator">100</p>
+                <p class="description">exemplo</p>
+            </li>
+        </ul>
+        <ul class="flex-container indicators CLASS_INDICATOR">
+            <li class="box-item OPTIONAL_CLASS_CHILD">
+                <p class="indicator">80</p>
+                <p class="description">exemplo 2</p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="latest-works">
+        <h2>Últimas Obras</h2>
+        <ul>
+            {% for obra in ultimas_obras_list %}
+                <li>
+                    <h3>{{ obra.titulo }}</h3>
+                    <p>{{ obra.descricao }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+</body>
+</html>

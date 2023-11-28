@@ -1,20 +1,33 @@
-from django.shortcuts import render, get_object_or_404, redirect
+
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.views import LoginView
 from .models import Pessoa
 from .forms import PessoaForm
 
 # imports para uso dos modelos e templates criados
 from django.template import loader
 from django.http import Http404
-from .models import Obra
+from .models import Obra, Unidade
 
+
+@login_required()
 def index(request):
-    ultimas_obras_list = Obra.objects.order_by ("-datacadastro")[:5] 
+    ultimas_obras_list = Obra.objects.order_by ("-datacadastro")[:5]
+    quantidade_obras = Unidade.objects.count()
+    
     template = loader.get_template("index.html")
     context = {
         "ultimas_obras_list":ultimas_obras_list,
+        "quantidade_obras": quantidade_obras,
     }
     return HttpResponse (template.render(context,request))
+
+def custom_login(request, **kwargs):
+    if request.user.is_authenticated:
+        return redirect('index')
+    return LoginView.as_view(template_name='bibpub/template/login.html')(request, **kwargs)
 
 def obra(request,obra_id):
     try:

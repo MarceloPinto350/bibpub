@@ -14,13 +14,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.contrib.auth.views import LoginView
 from django.urls import path
 
 from . import views
 
 urlpatterns = [
-    path("",views.index, name="index"),    # caminho raiz
-    path("obra/<int:obra_id>/", views.obra,name="obra"),    #visualiza
+    path('login/', LoginView.as_view(), name='login'),
+    path ("",views.index, name="index"),
+    # path ("obra/<int:obra_id>/", views.obra,name="obra"),    #visualiza
     # pessoa
     path("pessoa/", views.list_pessoa_view, name="list_pessoa_view"),
     path("pessoa/criar/", views.create_pessoa_view, name="create_pessoa_view"),
@@ -29,4 +31,9 @@ urlpatterns = [
     path("pessoa/<int:pessoa_id>/delete/", views.delete_pessoa_view, name="delete_pessoa_view"),
     # admin
     path("admin/", admin.site.urls),
+
+admin.site.site_header = 'Biblioteca Pública'
+admin.site.site_title = 'Biblioteca Pública'
+admin.site.index_title = 'Bem-vindo ao Painel Administrativo'
+
 ]
