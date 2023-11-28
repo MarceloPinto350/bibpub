@@ -22,7 +22,7 @@ class Categoria(models.Model):
         ]
 
 # Criação do modelo Pessoa
-class Pessoa (models.Model):
+class Pessoa(models.Model):
     OPC_SEXO = [
         ("M","Masculino"),
         ("F","Feminino"),

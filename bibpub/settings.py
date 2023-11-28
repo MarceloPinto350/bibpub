@@ -55,7 +55,7 @@ ROOT_URLCONF = "bibpub.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / 'templates'],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -86,13 +86,14 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'bibpub',
         'USER': 'bibpub',
-        'PASSWORD': '@dm1n',
-        'HOST': '172.17.0.3',
-        'PORT': '5432',
+        'PASSWORD': 'bibpub',
+        'HOST': 'localhost',
+        'PORT': '5432'
     }
 }
-
-#
+# import dj_database_url
+# DATABASES['default'] =  dj_database_url.config()
+# DATABASES['default']['ENGINE'] = 'django_postgrespool'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

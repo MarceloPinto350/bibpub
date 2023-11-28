@@ -1,0 +1,11 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+  <h2>Detail View</h2>
+  <ul>
+    {% for field_name, field_value in fields %}
+      <li><strong>{{ field_name }}:</strong> {{ field_value }}</li>
+    {% endfor %}
+  </ul>
+  <a href="{% url 'list_pessoa_view' %}">Back to List</a>
+{% endblock %}

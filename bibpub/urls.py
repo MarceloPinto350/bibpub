@@ -16,10 +16,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from . import views 
+from . import views
 
 urlpatterns = [
-    path ("",views.index, name="index"),    # caminho raiz
-    path ("obra/<int:obra_id>/", views.obra,name="obra"),    #visualiza
-    path ("admin/", admin.site.urls),
+    path("",views.index, name="index"),    # caminho raiz
+    path("obra/<int:obra_id>/", views.obra,name="obra"),    #visualiza
+    # pessoa
+    path("pessoa/", views.list_pessoa_view, name="list_pessoa_view"),
+    path("pessoa/criar/", views.create_pessoa_view, name="create_pessoa_view"),
+    path("pessoa/<int:pessoa_id>/", views.detail_pessoa_view, name="detail_pessoa_view"),
+    path("pessoa/<int:pessoa_id>/update/", views.update_pessoa_view, name="update_pessoa_view"),
+    path("pessoa/<int:pessoa_id>/delete/", views.delete_pessoa_view, name="delete_pessoa_view"),
+    # admin
+    path("admin/", admin.site.urls),
 ]

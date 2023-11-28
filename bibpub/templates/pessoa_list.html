@@ -1,0 +1,17 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+  <h2>List of Items</h2>
+  <a href="{% url 'create_pessoa_view' %}">Create New Item</a>
+  <ul>
+    {% for item in items %}
+      <li>
+        {{ item.nome }} - <a href="{% url 'detail_pessoa_view' item.id %}">View</a> | 
+        <a href="{% url 'update_pessoa_view' item.id %}">Edit</a> | 
+        <a href="{% url 'delete_pessoa_view' item.id %}">Delete</a>
+      </li>
+    {% empty %}
+      <li>No items available.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

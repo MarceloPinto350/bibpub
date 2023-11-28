@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.admin.options import ModelAdmin
 
 from bibpub.models import Editora
-from .models import Categoria,Autor,Obra
+from .models import Categoria,Autor,Obra,Pessoa
 
 class CategoriaAdmin(ModelAdmin):
     list_display = ('descricao',)
@@ -34,3 +34,15 @@ class EditoraAdmin(ModelAdmin):
     list_per_page = 20
 
 admin.site.register(Editora, EditoraAdmin)
+
+class PessoaAdmin(ModelAdmin):
+    list_display = ('OPC_SEXO', 'OPC_GENERO', 'Estados', 
+                    'OrigemCadastro', 'SituacaoCadastro',
+                    'nome', 'nascimento', 'cpf', 'sexo', 
+                    'genero', 'eMail', 'cep', 'endereco',
+                    'cidade', 'uf', 'cadastro', 'origem',
+                    'situacaocadastro')
+    list_display_icons = True
+    list_per_page = 20
+
+admin.site.register(Pessoa, PessoaAdmin)
