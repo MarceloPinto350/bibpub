@@ -4,6 +4,25 @@ from django.db import models
 from datetime import datetime
 from django.urls import reverse 
 
+# definições globais
+OPC_SEXO = [
+        ("M","Masculino"),
+        ("F","Feminino"),
+        ("I","Intersexo"),
+        ("N","Não informado"),
+    ]
+OPC_GENERO = [
+        (1,"Cisgênero"),
+        (2,"Transgênero"),
+        (3,"Transexual"),
+        (4,"Travesti"),
+        (5,"Gênero fluido"),
+        (6,"Agênero"),
+        (7,"Outra"),
+        (8,"Não informado"),
+    ] 
+
+# Classes
 class Categoria(models.Model):
     descricao = models.TextField('Descrição', unique=True)
 
@@ -22,24 +41,7 @@ class Categoria(models.Model):
         ]
 
 # Criação do modelo Pessoa
-class Pessoa (models.Model):
-    OPC_SEXO = [
-        ("M","Masculino"),
-        ("F","Feminino"),
-        ("I","Intersexo"),
-        ("N","Não informado"),
-    ]
-    OPC_GENERO = [
-        (1,"Cisgênero"),
-        (2,"Transgênero"),
-        (3,"Transexual"),
-        (4,"Travesti"),
-        (5,"Gênero fluido"),
-        (6,"Agênero"),
-        (7,"Outra"),
-        (8,"Não informado"),
-    ]
-    
+class Pessoa (models.Model):   
     Estados = models.TextChoices("Estados","AC AL AP AM BA CE DF ES GO MA MT MS MG PA PB PR PE PI RJ RO RR SC SP SE TO")
     OrigemCadastro = models.TextChoices("Origem cadastro" ,"INTERNET APLICAÇÃO")
     SituacaoCadastro = models.TextChoices("Situação cadastro","ATIVO PENDENTE SUSPENSO BLOQUEADO")
@@ -49,8 +51,8 @@ class Pessoa (models.Model):
     cpf = models.CharField("CPF", max_length=14, null=False, unique=True)
     #criar validador para CPF
     sexo = models.CharField("Sexo", max_length=1, null=False, choices=OPC_SEXO,default="N")
-    genero = models.IntegerField("Identidade de Gênero", null=False, choices=OPC_GENERO,default=1)
-    eMail = models.CharField("E-Mail", max_length=254, null=False)
+    genero = models.IntegerField("Identidade de Gênero", null=False, choices=OPC_GENERO,default=8)
+    email = models.CharField("E-Mail", max_length=254, null=False)
     # Verificar o uso do validador de e-mails
     #eMail = models.CharField("E-Mail", max_length=254, null=False, 
     #        validator=[
@@ -65,8 +67,8 @@ class Pessoa (models.Model):
     cidade = models.CharField("Cidade", max_length=200, null=False)
     uf = models.CharField("Unidade da federação", max_length=2, null=False, choices=Estados.choices)
     cadastro = models.DateTimeField ("Data do cadastro",auto_now_add=True)
-    origem = models.CharField("Origem do cadastro da pessoa", max_length=10, null=False, default="PENDENTE", choices=OrigemCadastro.choices)
-    situacaocadastro = models.CharField("Situação do cadastro da pessoa", max_length=10, null=False, default="INTERNET", choices=SituacaoCadastro.choices)
+    origem = models.CharField("Origem do cadastro da pessoa", max_length=10, null=False, default="INTERNET", choices=OrigemCadastro.choices)
+    situacaocadastro = models.CharField("Situação do cadastro da pessoa", max_length=10, null=False, default="PENDENTE", choices=SituacaoCadastro.choices)
     
     # retornar o valor padrão para a classe
     def __str__(self):
@@ -107,12 +109,38 @@ class Autor(models.Model):
         ]
 
 
+# Definição do modelo de Pais
+class Pais(models.Model):
+    codigo = models.CharField("Código do país", max_length=2, null=False, unique=True)
+    nome = models.CharField("Nome do país", max_length=150, null=False, unique=True)
+    datainicial = models.DateField("Data de início", null=False)
+    datafinal = models.DateField("Data de término", null=True)
+    
+    # retornar o valor padrão para a classe
+    def __str__(self):
+        #return f"{self.codigo}-{self.nome}"
+        return self.nome
+ 
+    # define o nome padrão da tabela a ser criada no BD
+    class Meta:
+        db_table = "tb_pais"
+        verbose_name = "País"
+        verbose_name_plural = "Países"
+        permissions = [
+            ("can_view_pais", "Can view paises"),
+            ("can_change_pais", "Can change paises"),
+            ("can_add_pais", "Can add paises"),
+            ("can_delete_pais", "Can delete paises"),
+        ]
+
+
 # Definição do modelo de Autor
 class Editora(models.Model):
     nome = models.CharField("Nome da editora", max_length=200, null=False, unique=True)
-    email = models.CharField("E-Mail de contato da editora", max_length=254, null=False)
+    email = models.CharField("E-Mail editora", max_length=254, null=False)
     # criar validação para os e-mails
-    pais = models.CharField("País da editora", max_length=100, null=False)
+    #pais = models.CharField("País da editora", max_length=100, null=False)
+    pais = models.ForeignKey(Pais, verbose_name=("País"), on_delete=models.CASCADE, null=False)
     # validar conformme tabela de países a ser criada
 
     def __str__(self):
@@ -136,10 +164,10 @@ class Obra(models.Model):
     titulo = models.CharField("Título da obra", max_length=200, null=False, unique=True, db_index=True)
     anopublicacao = models.PositiveSmallIntegerField("Ano de publicação da obra", null=False)
     # criar validação para o maior valor ser o ano corrente e o menor 100
-    edicao  = models.PositiveSmallIntegerField("Número da edição da obra", default=1, null=False)
+    descricao  = models.TextField("Resumo da obra", max_length=4000, null=True)
     isbn  = models.CharField('Número do ISBN da obra', max_length=20, null=True, blank=True)   # se for livro
     issn  = models.CharField('Número do ISSN da obra', max_length=20, null=True, blank=True)   # se for periódico
-    quantidade = models.PositiveSmallIntegerField('Quantidade de unidades', default=1, null=False)
+    #quantidade = models.PositiveSmallIntegerField('Quantidade de unidades', default=1, null=False)
     tipo  = models.CharField("Tipo de obra", max_length=10, null=False, choices=TipoObra.choices)
     datacadastro = models.DateTimeField("Data de registro da obra",auto_now_add=True,null=False,db_index=True)
     dataatualizacao = models.DateTimeField("Data de modificação no registro da obra",auto_now_add=True,null=False)
@@ -150,12 +178,20 @@ class Obra(models.Model):
     def __str__(self):
         return self.titulo    
     
-    def get_absolute_url(self):
-        return reverse ("obra",args=[str(self.id)]) 
+    #def get_absolute_url(self):
+    #    return reverse ("obra",args=[str(self.id)]) 
     
     def mostra_categoria(self):
         return ', '.join(categoria.descricao for categoria in self.categoria.all()[:1])
     mostra_categoria.short_description = "Categoria"
+    
+    def mostra_autor(self):
+        return ', '.join(autor.nome for autor in self.autor.all()[:1])
+    mostra_autor.short_description = "Autor"
+    
+    #def get_quantidade(self):
+    #    Unidade.get_quantidade()
+    #get_quantidade.short_description = "Quantidade Unidades"
         
     # define as configurações da classe Meta (dados de BD)
     class Meta:
@@ -174,18 +210,25 @@ class Obra(models.Model):
 class Unidade (models.Model):
     TipoDisponibilidade = models.TextChoices("Tipo disponibilidade","INTERNO INDISPONÍVEL EMPRÉSTIMO")
     obra = models.ForeignKey(Obra, verbose_name=("Obra"), on_delete=models.CASCADE)
-    disponibilidade = models.CharField(max_length = 15, null=False, choices=TipoDisponibilidade.choices)
+    disponibilidade = models.CharField("Disponibilidade da unidade da obra",max_length = 15, null=False, choices=TipoDisponibilidade.choices)
+    edicao  = models.PositiveSmallIntegerField("Número da edição da obra", default=1, null=False)
     datainclusao = models.DateTimeField("Data de inclusão da unidade da obra",auto_now_add=True,null=False)
      
     def __str__(self):
-        return f"{self.obra.titulo} - {self.disponibilidade}"
+        return self.obra.titulo
+        #return self.mostra_obra()
+        #return f"{self.obra.titulo} - {self.disponibilidade} - {self.edicao}"
     
-    def get_absolute_url(self):
-        return reverse ("unidade",args=[str(self.id)]) 
+    #def get_absolute_url(self):
+    #    return reverse ("unidade",args=[str(self.id)]) 
     
     def mostra_obra(self):
         return ', '.join(obra.titulo for obra in self.obra.all()[:1])
     mostra_obra.short_description = "Obra"
+    
+    #def get_quantidade(self):
+    #    return Unidade.unidade_set.count()
+    #get_quantidade.short_description = "Quantidade Unidades"
         
     # define as configurações da classe Meta (dados de BD)
     class Meta:
@@ -248,19 +291,6 @@ class Reserva(models.Model):
             ("can_add_reserva", "Can add reservas"),
             ("can_delete_reserva", "Can delete reservas"),
         ]
-
-# Definição do modelo de papel
-#class Papel(models.Model):
-#    nome = models.CharField("Papel", max_length=50, null=False, unique=True)
-#    descricao = models.CharField("Descrição", max_length=200, null=False)
-#    
-#    # retornar o valor padrão para a classe
-#    def __str__(self):
-#        return f"{self.nome} - {self.descricao}"
-# 
-#    # define o nome padrão da tabela a ser criada no BD
-#    class Meta:
-#        db_table = "tb_papel"
 
 
 # Definição do modelo de usuario

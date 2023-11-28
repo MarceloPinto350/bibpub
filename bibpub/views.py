@@ -6,13 +6,14 @@ from django.contrib.auth.views import LoginView
 # imports para uso dos modelos e templates criados
 from django.template import loader
 from django.http import Http404
-from .models import Obra
+from .models import Obra, Unidade
 
 
 @login_required()
 def index(request):
     ultimas_obras_list = Obra.objects.order_by ("-datacadastro")[:5]
-    quantidade_obras = Obra.objects.count()
+    quantidade_obras = Unidade.objects.count()
+    
     template = loader.get_template("index.html")
     context = {
         "ultimas_obras_list":ultimas_obras_list,
