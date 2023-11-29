@@ -3,13 +3,12 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.views import LoginView
-from .models import Pessoa
-from .forms import PessoaForm
 
 # imports para uso dos modelos e templates criados
 from django.template import loader
 from django.http import Http404
-from .models import Obra, Unidade
+from .models import Obra, Unidade, Pessoa
+from .forms import PessoaForm
 
 
 @login_required()

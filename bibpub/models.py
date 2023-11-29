@@ -58,7 +58,7 @@ class Pessoa(models.Model):
         (7,"Outra"),
         (8,"Não informado"),
     ]
-    Estados = models.TextChoices("Estados","AC AL AP AM BA CE DF ES GO MA MT MS MG PA PB PR PE PI RJ RO RR SC SP SE TO")
+    Estados = models.TextChoices("Estados","AC AL AP AM BA CE DF ES GO MA MT MS MG PA PB PE PR PI RJ RN RO RR RS SC SP SE TO")
     OrigemCadastro = models.TextChoices("Origem cadastro" ,"INTERNET APLICAÇÃO")
     SituacaoCadastro = models.TextChoices("Situação cadastro","ATIVO PENDENTE SUSPENSO BLOQUEADO")
     #id = models.BigAutoField(primary_key=True)
@@ -67,7 +67,7 @@ class Pessoa(models.Model):
     cpf = models.CharField("CPF", max_length=14, null=False, unique=True)
     #criar validador para CPF
     sexo = models.CharField("Sexo", max_length=1, null=False, choices=OPC_SEXO,default="N")
-    genero = models.IntegerField("Identidade de Gênero", null=False, choices=OPC_GENERO,default=8)
+    genero = models.IntegerField("Gênero", null=False, choices=OPC_GENERO,default=8)
     email = models.CharField("E-Mail", max_length=254, null=False)
     # Verificar o uso do validador de e-mails
     #eMail = models.CharField("E-Mail", max_length=254, null=False, 
@@ -81,7 +81,7 @@ class Pessoa(models.Model):
     #cep = models.ForeignKey (ZipCode,on_delete=models.SET_NULL, blank=True, null=True,)
     endereco = models.CharField("Endereço", max_length=200, null=False)
     cidade = models.CharField("Cidade", max_length=200, null=False)
-    uf = models.CharField("Unidade da federação", max_length=2, null=False, choices=Estados.choices)
+    uf = models.CharField("UF", max_length=2, null=False, choices=Estados.choices)
     cadastro = models.DateTimeField ("Data do cadastro",auto_now_add=True)
     origem = models.CharField("Origem do cadastro da pessoa", max_length=10, null=False, default="INTERNET", choices=OrigemCadastro.choices)
     situacaocadastro = models.CharField("Situação do cadastro da pessoa", max_length=10, null=False, default="PENDENTE", choices=SituacaoCadastro.choices)

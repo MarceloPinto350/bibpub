@@ -5,5 +5,5 @@ class PessoaForm(forms.ModelForm):
     class Meta:
         model = Pessoa
         fields = ['nome', 'nascimento', 'cpf', 'sexo', 
-                'genero', 'eMail', 'cep', 'endereco',
+                'genero', 'email', 'cep', 'endereco',
                 'cidade', 'uf','origem', 'situacaocadastro']

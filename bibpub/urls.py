@@ -19,6 +19,10 @@ from django.urls import path
 
 from . import views
 
+admin.site.site_header = 'Biblioteca Pública'
+admin.site.site_title = 'Biblioteca Pública'
+admin.site.index_title = 'Bem-vindo ao Painel Administrativo'
+
 urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),
     path ("",views.index, name="index"),
@@ -31,9 +35,4 @@ urlpatterns = [
     path("pessoa/<int:pessoa_id>/delete/", views.delete_pessoa_view, name="delete_pessoa_view"),
     # admin
     path("admin/", admin.site.urls),
-
-admin.site.site_header = 'Biblioteca Pública'
-admin.site.site_title = 'Biblioteca Pública'
-admin.site.index_title = 'Bem-vindo ao Painel Administrativo'
-
 ]

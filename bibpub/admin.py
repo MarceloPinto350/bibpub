@@ -37,7 +37,9 @@ admin.site.register(Editora,EditoraAdmin)
 # registrando a Obra
 class UnidadeEmLinha(admin.TabularInline):
     model = Unidade 
+    list_per_page = 8
     extra = 2
+    
 
 class ObraAdmin(ModelAdmin):
     list_display = ('titulo', 'anopublicacao', 'tipo', 'datacadastro', 'descricao',) #, 'mostra_categoria', 'mostra_autor')
@@ -58,18 +60,14 @@ class PaisAdmin(ModelAdmin):
     list_per_page = 20
 admin.site.register(Pais,PaisAdmin)    
 
-admin.site.register(Editora, EditoraAdmin)
 
 class PessoaAdmin(ModelAdmin):
-    list_display = ('OPC_SEXO', 'OPC_GENERO', 'Estados', 
-                    'OrigemCadastro', 'SituacaoCadastro',
-                    'nome', 'nascimento', 'cpf', 'sexo', 
-                    'genero', 'eMail', 'cep', 'endereco',
+    list_display = ('nome', 'nascimento', 'cpf', 'sexo', 
+                    'genero', 'email', 'cep', 'endereco',
                     'cidade', 'uf', 'cadastro', 'origem',
                     'situacaocadastro')
     list_display_icons = True
     list_per_page = 20
-
 admin.site.register(Pessoa, PessoaAdmin)
 
 admin.site.register(User)
