@@ -7,8 +7,9 @@ from django.contrib.auth.views import LoginView
 # imports para uso dos modelos e templates criados
 from django.template import loader
 from django.http import Http404
-from .models import Obra, Unidade, Pessoa
-from .forms import PessoaForm
+from .models import Obra, Unidade, Pessoa, Reserva
+from .forms import PessoaForm   #, ReservaForm
+
 
 
 @login_required()
@@ -66,3 +67,13 @@ def delete_pessoa_view(request, pessoa_id):
         item.delete()
         return redirect('pessoa_list_view')
     return render(request, 'pessoa_delete_confirm.html', {'item': item})
+
+# Reservas
+def view_reserva(request, reserva_id):
+    reservas_ativas = Reserva.objects.filter(situacaoreserva='ATIVA')
+    #reservas_expiradas = Reserva.objects.filter(situacaoreserva='EXPIRADA')
+    template = loader.get_template("reserva_view.html")
+    context = {
+        "reservas_ativas":reservas_ativas,
+    }
+    return HttpResponse (template.render(context,request))

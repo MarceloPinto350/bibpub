@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # outros imports usados
 from datetime import datetime
 from django.urls import reverse 
@@ -42,22 +43,6 @@ class Categoria(models.Model):
 
 # Criação do modelo Pessoa
 class Pessoa(models.Model):  
-    OPC_SEXO = [
-        ("M","Masculino"),
-        ("F","Feminino"),
-        ("I","Intersexo"),
-        ("N","Não informado"),
-    ]
-    OPC_GENERO = [
-        (1,"Cisgênero"),
-        (2,"Transgênero"),
-        (3,"Transexual"),
-        (4,"Travesti"),
-        (5,"Gênero fluido"),
-        (6,"Agênero"),
-        (7,"Outra"),
-        (8,"Não informado"),
-    ]
     Estados = models.TextChoices("Estados","AC AL AP AM BA CE DF ES GO MA MT MS MG PA PB PE PR PI RJ RN RO RR RS SC SP SE TO")
     OrigemCadastro = models.TextChoices("Origem cadastro" ,"INTERNET APLICAÇÃO")
     SituacaoCadastro = models.TextChoices("Situação cadastro","ATIVO PENDENTE SUSPENSO BLOQUEADO")
@@ -83,8 +68,8 @@ class Pessoa(models.Model):
     cidade = models.CharField("Cidade", max_length=200, null=False)
     uf = models.CharField("UF", max_length=2, null=False, choices=Estados.choices)
     cadastro = models.DateTimeField ("Data do cadastro",auto_now_add=True)
-    origem = models.CharField("Origem do cadastro da pessoa", max_length=10, null=False, default="INTERNET", choices=OrigemCadastro.choices)
-    situacaocadastro = models.CharField("Situação do cadastro da pessoa", max_length=10, null=False, default="PENDENTE", choices=SituacaoCadastro.choices)
+    origem = models.CharField("Origem do cadastro", max_length=10, null=False, default="INTERNET", choices=OrigemCadastro.choices)
+    situacaocadastro = models.CharField("Situação do cadastro", max_length=10, null=False, default="PENDENTE", choices=SituacaoCadastro.choices)
     
     # retornar o valor padrão para a classe
     def __str__(self):
@@ -205,9 +190,9 @@ class Obra(models.Model):
         return ', '.join(autor.nome for autor in self.autor.all()[:1])
     mostra_autor.short_description = "Autor"
     
-    #def get_quantidade(self):
-    #    Unidade.get_quantidade()
-    #get_quantidade.short_description = "Quantidade Unidades"
+    def get_unidades_disponiveis(self):
+        return Unidade.objects.filter(disponibilidade="EMPRESTIMO",obra_id=self.id).count()
+    get_unidades_disponiveis.short_description = "Unidades"
         
     # define as configurações da classe Meta (dados de BD)
     class Meta:
@@ -215,6 +200,7 @@ class Obra(models.Model):
         ordering = ["titulo","-datacadastro"] # traz por padrão os registros ordenados pelo título e data de registro decrescente
         verbose_name = 'Obra'
         verbose_name_plural = 'Obras'
+        
         permissions = [
             ("can_view_obra", "Can view obras"),
             ("can_change_obra", "Can change obras"),
@@ -224,11 +210,11 @@ class Obra(models.Model):
 
 # Definição do modelo de Unidade (de obra)
 class Unidade (models.Model):
-    TipoDisponibilidade = models.TextChoices("Tipo disponibilidade","INTERNO INDISPONÍVEL EMPRÉSTIMO")
+    TipoDisponibilidade = models.TextChoices("Tipo disponibilidade","INTERNO INDISPONIVEL EMPRESTIMO")
     obra = models.ForeignKey(Obra, verbose_name=("Obra"), on_delete=models.CASCADE)
-    disponibilidade = models.CharField("Disponibilidade da unidade da obra",max_length = 15, null=False, choices=TipoDisponibilidade.choices)
+    disponibilidade = models.CharField("Disponibilidade da unidade da obra", default="EMPRESTIMO", max_length = 15, null=False, choices=TipoDisponibilidade.choices)
     edicao  = models.PositiveSmallIntegerField("Número da edição da obra", default=1, null=False)
-    datainclusao = models.DateTimeField("Data de inclusão da unidade da obra",auto_now_add=True,null=False)
+    datainclusao = models.DateTimeField("Data de inclusão",auto_now_add=True,null=False)
      
     def __str__(self):
         return self.obra.titulo
@@ -242,9 +228,9 @@ class Unidade (models.Model):
         return ', '.join(obra.titulo for obra in self.obra.all()[:1])
     mostra_obra.short_description = "Obra"
     
-    #def get_quantidade(self):
-    #    return Unidade.unidade_set.count()
-    #get_quantidade.short_description = "Quantidade Unidades"
+    def get_quantidade_disponivel(self):
+        return Unidade.objects.filter(disponibilidade="EMPRESTIMO").count()
+    get_quantidade_disponivel.short_description = "Quantidade unidades disponível para empréstimo"
         
     # define as configurações da classe Meta (dados de BD)
     class Meta:
@@ -289,18 +275,27 @@ class Reserva(models.Model):
     SituacaoReserva = models.TextChoices("Situação reserva","ATIVA CANCELADA EXPIRADA")
     pessoa = models.ForeignKey(Pessoa, verbose_name=("Pessoa"), on_delete=models.CASCADE,)
     obra = models.ManyToManyField(Obra, verbose_name=("Obra"))
-    situacaoreserva = models.CharField(max_length = 10, default="ATIVA", null=False)
+    situacaoreserva = models.CharField("Situação da reserva",max_length = 10, default="ATIVA", null=False, choices=SituacaoReserva.choices)
     datareserva = models.DateTimeField ("Data da reserva",auto_now_add=True, null=False)
     
     # retornar o valor padrão para a classe
     def __str__(self):
-        return f"{self.pessoa.nome} - {self.obra.titulo}: {self.datareserva} - {self.situacaoreserva}"
- 
+        #return f"{self.pessoa.nome} - {self.obra.titulo}: {self.datareserva} - {self.situacaoreserva}"
+        return self.situacaoreserva
+    
+    # define a url de retorno dos dados da reserva
+    #def get_absolute_url(self):
+    #    return reverse("reserva_view", args=[str(self.id)])
+    
+    def mostra_obras(self):
+        return ', '.join(obra.titulo for obra in self.obra.all()[:1])
+    
     # define o nome padrão da tabela a ser criada no BD
     class Meta:
         db_table = "tb_reserva"
         verbose_name = "Reserva"
         verbose_name_plural = "Reservas"
+        ordering = ['pessoa','datareserva']
         permissions = [
             ("can_view_reserva", "Can view reservas"),
             ("can_change_reserva", "Can change reservas"),
@@ -309,17 +304,17 @@ class Reserva(models.Model):
         ]
 
 
-# Definição do modelo de usuario
-#class Usuario(models.Model):
-#    pessoa = models.ForeignKey (Pessoa,on_delete=models.CASCADE,)
-#    papel = models.ForeignKey (Papel,on_delete=models.CASCADE,)
-#    inicio = models.DateTimeField ("Início do período de validadade do papel",auto_now_add=True)
-#    fim = models.DateTimeField ("Final do período", null=True)
-#
-#    # retornar o valor padrão para a classe
+# Definição do modelo de ReservaObra
+#class ReservaObra(models.Model):
+#    reserva = models.ForeignKey (Reserva,on_delete=models.CASCADE,)
+#    obra = models.ForeignKey (Obra,on_delete=models.CASCADE,)
+
+    # retornar o valor padrão para a classe
 #    def __str__(self):
-#        return f"{self.pessoa}/{self.papel}-{self.inicio}"
-#
-#    # define o nome padrão da tabela a ser criada no BD
-#    class Meta:
-#        db_table = "tb_usuario"
+#        return self.id
+
+    # define o nome padrão da tabela a ser criada no BD
+ #   class Meta:
+ #       db_table = "tb_reserva_obra"
+ #       verbose_name = "Reserva obra"
+ #       verbose_name_plural = "Reservas obras"

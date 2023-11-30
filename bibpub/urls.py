@@ -33,6 +33,8 @@ urlpatterns = [
     path("pessoa/<int:pessoa_id>/", views.detail_pessoa_view, name="detail_pessoa_view"),
     path("pessoa/<int:pessoa_id>/update/", views.update_pessoa_view, name="update_pessoa_view"),
     path("pessoa/<int:pessoa_id>/delete/", views.delete_pessoa_view, name="delete_pessoa_view"),
+    # reserva
+    #path ("reserva/<int:reserva_id>/", views.view_reserva, name="view_reserva"),    #visualiza 
     # admin
     path("admin/", admin.site.urls),
 ]
