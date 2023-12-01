@@ -3,6 +3,7 @@ from django.contrib.admin.options import ModelAdmin
 from django.contrib.auth.models import User, Group
 from .models import Categoria, Autor, Obra, Unidade, Pais, Editora, Pessoa, Reserva #, ReservaObra
 
+
 class CustomAdminSite(admin.AdminSite):
     site_header = 'Biblioteca Pública'
     site_title = 'Biblioteca Pública'
@@ -14,7 +15,7 @@ class CategoriaAdmin(ModelAdmin):
     list_display = ('descricao',)
     list_display_icons = True
     list_per_page = 10
-    
+
 admin.site.register(Categoria, CategoriaAdmin)
 
 # registando o Autor

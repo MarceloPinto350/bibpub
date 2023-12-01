@@ -143,7 +143,12 @@
     <div class="header">
         <h1>Biblioteca Pública</h1>
     </div>
-
+    <div class="user-info" style="text-align: right; padding: 10px; background-color: #3498db; color: #fff;">
+    {% if user.is_authenticated %}
+        <p>Bem-vindo, {{ user.username }}!</p>
+        <a href="{% url 'admin:logout' %}" style="color: #fff; text-decoration: underline;">Sair</a>
+    {% endif %}
+</div>
     <div class="menu">
         <ul>
             <li><a href="#">Página Inicial</a></li>
@@ -158,7 +163,7 @@
     {% if messages %}
         <ul class="messages">
             {% for message in messages %}
-                <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
             {% endfor %}
         </ul>
     {% endif %}

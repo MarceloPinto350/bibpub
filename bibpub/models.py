@@ -106,6 +106,7 @@ class Pessoa(models.Model):
         super().save(*args, **kwargs)
         if self.situacaocadastro == 'ATIVO':
             user = User.objects.create(username=self.cpf)
+            user.is_staff = True
             user.set_password('123')
             user.save()
 
