@@ -94,7 +94,8 @@ DATABASES = {
         'NAME': 'bibpubdb',
         'USER': 'bibpub',
         'PASSWORD': '@dm1n',
-        'HOST': '172.17.0.3',
+        #'HOST': '172.17.0.3',
+        'HOST': 'db',    # ajustado conforme o deply da aplicação #37
         'PORT': '5432'
     }
 }
