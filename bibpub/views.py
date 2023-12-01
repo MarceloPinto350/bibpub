@@ -11,6 +11,7 @@ from .models import Obra, Unidade, Pessoa, Reserva
 from .forms import PessoaForm   #, ReservaForm
 from .forms import CadastroPessoaForm
 from django.contrib import messages
+from .decorators import groups_required
 
 
 @login_required()
@@ -96,10 +97,9 @@ def cadastrar_pessoa(request):
 
     return render(request, 'cadastrar_pessoa.html', {'form': form})
 
-@login_required()
+@groups_required(['Coordenador', 'Operador'])
 def avaliar_cadastros(request):
     cadastros_pendentes = Pessoa.objects.filter(situacaocadastro='PENDENTE')
-
     if request.method == 'POST':
         for pessoa_id, status in request.POST.items():
             if pessoa_id.isdigit() and status in ['APROVAR', 'RECUSAR']:
