@@ -35,6 +35,23 @@ Contem as configurações da máquina utilizada como cliente de desenvolvimento
 ### bibpub
 Contem o código fonte da aplicação propriamente dita
 
+### deploy
+Contem os arquivos de configuração para deploy aplicação em ambiente docker
+
+
+## Executando a aplicação
+Para executar a aplicação acessar a máquina virtual, configurada na forma do script indicado (./inicializaConfig.sh) onde será executada e proceder os passos abaixo:
+1. Acessar o prompt de comando e criar uma pasta local para a aplicação, por exemplo git
+    * $ mkdir git
+2. Em seguida, clone o diretório da aplicação, exemplo:
+    * $ git clone https://github.com/MarceloPinto350/bibpub-imd.git
+3. Vá para o diretório deploy e executeo comando a seguir:
+    * $ cd bibpub-imd/deploy
+    * $ docker-compose up
+
+Testar a aplicação acessando na sua máquina virtual o endereço localhost:8000 ou, na sua máquina principal, acessando o endereço da máquina virtal <ip>:8000.
+ 
+
 
 ## Entidades
 
