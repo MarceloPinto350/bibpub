@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User, Group
 
 # outros imports usados
 from datetime import datetime
@@ -22,6 +22,10 @@ OPC_GENERO = [
         (7,"Outra"),
         (8,"Não informado"),
     ] 
+#GRUPOS
+grupo_coordenador, created = Group.objects.get_or_create(name='Coordenador')
+grupo_operador, created = Group.objects.get_or_create(name='Operador')
+grupo_usuario, created = Group.objects.get_or_create(name='Usuário')
 
 # Classes
 class Categoria(models.Model):
@@ -96,6 +100,20 @@ class Pessoa(models.Model):
             ("can_add_pessoa", "Can add pessoas"),
             ("can_delete_pessoa", "Can delete pessoas"),
         ]
+
+    def save(self, *args, **kwargs):
+        created = not self.pk
+        super().save(*args, **kwargs)
+        import ipdb; ipdb.set_trace()
+        pass
+        if self.situacaocadastro == 'ATIVO':
+            user = User.objects.create(username=self.cpf)
+            user.set_password('123')
+            user.save()
+
+
+            grupo_usuario, _ = Group.objects.get_or_create(name='Usuário')
+            user.groups.add(grupo_usuario)
 
 
 # Definição do modelo de Autor
