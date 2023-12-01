@@ -84,13 +84,12 @@ def cadastrar_pessoa(request):
     if request.method == 'POST':
         form = CadastroPessoaForm(request.POST)
         if form.is_valid():
-            # Salva o formulário, mas não ativa o usuário imediatamente
             pessoa = form.save(commit=False)
             pessoa.situacaocadastro = 'PENDENTE'
             pessoa.save()
 
             messages.success(request, 'Cadastro realizado com sucesso. Aguarde a análise.')
-            return redirect('login')  # Redirecionar para a tela de login
+            return redirect('login')
 
     else:
         form = CadastroPessoaForm()
