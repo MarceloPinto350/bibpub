@@ -7,6 +7,8 @@ from django.contrib.auth.views import LoginView
 # imports para uso dos modelos e templates criados
 from django.template import loader
 from django.http import Http404
+
+from bibpub.models import Editora
 from .models import Obra, Unidade, Pessoa, Reserva
 from .forms import PessoaForm   #, ReservaForm
 from .forms import CadastroPessoaForm
@@ -17,12 +19,15 @@ from .decorators import groups_required
 @login_required()
 def index(request):
     ultimas_obras_list = Obra.objects.order_by ("-datacadastro")[:5]
-    quantidade_obras = Unidade.objects.count()
-    
+    quantidade_obras = Obra.objects.count()
+    quantidade_editoras = Editora.objects.count()
+    quantidade_pessoas = Pessoa.objects.count()
     template = loader.get_template("index.html")
     context = {
         "ultimas_obras_list":ultimas_obras_list,
         "quantidade_obras": quantidade_obras,
+        "quantidade_editoras": quantidade_editoras,
+        "quantidade_pessoas": quantidade_pessoas,
     }
     return HttpResponse (template.render(context,request))
 
