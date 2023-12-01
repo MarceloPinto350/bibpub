@@ -100,7 +100,7 @@
         }
 
         .indicator {
-            font-size: 24px;
+            font-size: 40px;
             font-weight: bold;
             text-align: center;
             color: #3498db;
@@ -172,19 +172,19 @@
         <div class="flex-container">
         <div class="box-item">
             <p class="indicator">{{ quantidade_obras }}</p>
-            <p class="description">obras cadastradas</p>
+            <p class="description">Obras cadastradas</p>
         </div>
         </div>
         <ul class="flex-container indicators CLASS_INDICATOR">
             <li class="box-item OPTIONAL_CLASS_CHILD">
-                <p class="indicator">100</p>
-                <p class="description">exemplo</p>
+                <p class="indicator">{{ quantidade_editoras }}</p>
+                <p class="description">Editoras cadastradas</p>
             </li>
         </ul>
         <ul class="flex-container indicators CLASS_INDICATOR">
             <li class="box-item OPTIONAL_CLASS_CHILD">
-                <p class="indicator">80</p>
-                <p class="description">exemplo 2</p>
+                <p class="indicator">{{ quantidade_pessoas }}</p>
+                <p class="description">Usuários cadastrados</p>
             </li>
         </ul>
     </div>
