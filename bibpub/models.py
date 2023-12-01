@@ -104,13 +104,10 @@ class Pessoa(models.Model):
     def save(self, *args, **kwargs):
         created = not self.pk
         super().save(*args, **kwargs)
-        import ipdb; ipdb.set_trace()
-        pass
         if self.situacaocadastro == 'ATIVO':
             user = User.objects.create(username=self.cpf)
             user.set_password('123')
             user.save()
-
 
             grupo_usuario, _ = Group.objects.get_or_create(name='Usuário')
             user.groups.add(grupo_usuario)
