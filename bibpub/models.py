@@ -25,7 +25,7 @@ OPC_GENERO = [
 
 # Classes
 class Categoria(models.Model):
-    descricao = models.TextField('Descrição', unique=True)
+    descricao = models.CharField('Descrição', unique=True)
 
     def __str__(self):
         return self.descricao
@@ -42,10 +42,21 @@ class Categoria(models.Model):
         ]
 
 # Criação do modelo Pessoa
-class Pessoa(models.Model):  
+class Pessoa(models.Model):
+    SITUACAO_CHOICES = [
+        ('PENDENTE', 'Pendente'),
+        ('ATIVO', 'Ativo'),
+        ('SUSPENSO', 'Suspenso'),
+        ('BLOQUEADO', 'Bloqueado'),
+    ]
     Estados = models.TextChoices("Estados","AC AL AP AM BA CE DF ES GO MA MT MS MG PA PB PE PR PI RJ RN RO RR RS SC SP SE TO")
     OrigemCadastro = models.TextChoices("Origem cadastro" ,"INTERNET APLICAÇÃO")
-    SituacaoCadastro = models.TextChoices("Situação cadastro","ATIVO PENDENTE SUSPENSO BLOQUEADO")
+    situacaocadastro = models.CharField(
+        max_length=10,
+        choices=SITUACAO_CHOICES,
+        default='PENDENTE',
+        verbose_name="Situação do cadastro",
+    )
     #id = models.BigAutoField(primary_key=True)
     nome = models.CharField("Nome", max_length=200, null=False,db_index=True)
     nascimento = models.DateField("Data nascimento")
@@ -55,9 +66,9 @@ class Pessoa(models.Model):
     genero = models.IntegerField("Gênero", null=False, choices=OPC_GENERO,default=8)
     email = models.CharField("E-Mail", max_length=254, null=False)
     # Verificar o uso do validador de e-mails
-    #eMail = models.CharField("E-Mail", max_length=254, null=False, 
+    #eMail = models.CharField("E-Mail", max_length=254, null=False,
     #        validator=[
-    #            EmailValidator(message="Informe um e-mail válido!", 
+    #            EmailValidator(message="Informe um e-mail válido!",
     #            code=None,
     #            allowlist=None)
     #        ])
@@ -69,8 +80,7 @@ class Pessoa(models.Model):
     uf = models.CharField("UF", max_length=2, null=False, choices=Estados.choices)
     cadastro = models.DateTimeField ("Data do cadastro",auto_now_add=True)
     origem = models.CharField("Origem do cadastro", max_length=10, null=False, default="INTERNET", choices=OrigemCadastro.choices)
-    situacaocadastro = models.CharField("Situação do cadastro", max_length=10, null=False, default="PENDENTE", choices=SituacaoCadastro.choices)
-    
+
     # retornar o valor padrão para a classe
     def __str__(self):
         return self.nome
