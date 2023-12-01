@@ -1,0 +1,36 @@
+version: '3.3'
+
+services:
+  # Banco de dados Postggresql
+  db:
+    image: postgres:alpine
+    container_name: bibpub-postgres
+    environment:
+      - POSTGRES_DB=bibpubdb 
+      - POSTGRES_USER=bibpub 
+      - POSTGRES_PASSWORD=@dm1n
+      - LANG=pt_BR.UTF8 
+      - PGDATA=/var/lib/postgresql/data 
+    ports:
+      5432:5432
+    volumes:
+      postgres_data:/var/lib/postgresql/data 
+
+  # Aplicação web
+  web:
+    build: .
+    #command: ["./bibpub_web.sh"]
+    command: python manage.py runserver 0.0.0.0:8000
+    container_name: bibpub-web
+    volumes:
+      - .:/bibpub
+    ports:
+      - "8000"
+    links:
+      - db
+    depends_on:
+      - db 
+
+  # Volumes
+  volumes:
+    postgres-data:
