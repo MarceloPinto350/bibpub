@@ -9,7 +9,8 @@ from django.template import loader
 from django.http import Http404
 from .models import Obra, Unidade, Pessoa, Reserva
 from .forms import PessoaForm   #, ReservaForm
-
+from .forms import CadastroPessoaForm
+from django.contrib import messages
 
 
 @login_required()
@@ -77,3 +78,39 @@ def view_reserva(request, reserva_id):
         "reservas_ativas":reservas_ativas,
     }
     return HttpResponse (template.render(context,request))
+
+
+def cadastrar_pessoa(request):
+    if request.method == 'POST':
+        form = CadastroPessoaForm(request.POST)
+        if form.is_valid():
+            # Salva o formulário, mas não ativa o usuário imediatamente
+            pessoa = form.save(commit=False)
+            pessoa.situacaocadastro = 'PENDENTE'
+            pessoa.save()
+
+            messages.success(request, 'Cadastro realizado com sucesso. Aguarde a análise.')
+            return redirect('login')  # Redirecionar para a tela de login
+
+    else:
+        form = CadastroPessoaForm()
+
+    return render(request, 'cadastrar_pessoa.html', {'form': form})
+
+@login_required()
+def avaliar_cadastros(request):
+    cadastros_pendentes = Pessoa.objects.filter(situacaocadastro='PENDENTE')
+
+    if request.method == 'POST':
+        for pessoa_id, status in request.POST.items():
+            if pessoa_id.isdigit() and status in ['APROVAR', 'RECUSAR']:
+                pessoa = Pessoa.objects.get(pk=int(pessoa_id))
+                if status == 'APROVAR':
+                    pessoa.situacaocadastro = 'ATIVO'
+                else:
+                    pessoa.situacaocadastro = 'BLOQUEADO'
+                pessoa.save()
+        messages.success(request, 'Análise realizada com sucesso.')
+        return redirect('index')
+
+    return render(request, 'avaliar_cadastros.html', {'cadastros_pendentes': cadastros_pendentes})

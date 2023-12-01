@@ -114,7 +114,7 @@
         .latest-works {
         margin-top: 20px;
         margin-left: 20px;
-        margin-right: 20px;s
+        margin-right: 20px;
         }
 
         .latest-works h2 {
@@ -149,10 +149,18 @@
             <li><a href="#">Página Inicial</a></li>
             <li><a href="/admin/bibpub/categoria/">Categoria</a></li>
             <li><a href="/admin/bibpub/obra/">Obra</a></li>
+            <li><a href="/admin/bibpub/autor/">Autor</a></li>
             <li><a href="/admin/bibpub/reserva/">Reserva</a></li>
+            <li><a href="/admin/bibpub/pessoa/">Usuário</a></li>
         </ul>
     </div>
-
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
     <div class="content">
         <div class="flex-container">
         <div class="box-item">

@@ -16,5 +16,8 @@ class PessoaForm(forms.ModelForm):
 #        #exclude = ['datareserva']
 #        all_reservas = Reserva.objects.all()
         
-        
-    
+
+class CadastroPessoaForm(forms.ModelForm):
+    class Meta:
+        model = Pessoa
+        fields = ['nome', 'nascimento', 'cpf', 'sexo', 'genero', 'email', 'cep', 'endereco', 'cidade', 'uf', 'origem']
