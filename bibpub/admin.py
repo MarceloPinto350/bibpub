@@ -35,7 +35,7 @@ admin.site.register(Editora,EditoraAdmin)
 # registrando a Obra
 class UnidadeEmLinha(admin.TabularInline):
     model = Unidade 
-    list_per_page = 10
+    list_per_page = 3
     readonly_fields = ('obra','datainclusao',)
     extra = 2
 
@@ -72,7 +72,7 @@ admin.site.register(Reserva,ReservaAdmin)
 class ReservaEmLinha(admin.TabularInline):
     model = Reserva
     extra = 0
-    max_num = 10
+    max_num = 3
     ordering   = ('situacaoreserva','-datareserva',)
     readonly_fields = ('obra','situacaoreserva','datareserva')
     can_delete = False 

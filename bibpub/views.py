@@ -36,13 +36,6 @@ def custom_login(request, **kwargs):
         return redirect('index')
     return LoginView.as_view(template_name='bibpub/template/login.html')(request, **kwargs)
 
-def obra(request,obra_id):
-    try:
-        obra = Obra.objects.get(obra_id)
-    except Obra.DoesNotExist:
-        raise Http404("Obra não está cadastrada.")
-    return render(request,"obra.html",{"obra":obra})
-
 # CRUD Pessoa
 def create_pessoa_view(request):
     form = PessoaForm(request.POST or None)
@@ -76,12 +69,42 @@ def delete_pessoa_view(request, pessoa_id):
     return render(request, 'pessoa_delete_confirm.html', {'item': item})
 
 # Reservas
-def view_reserva(request, reserva_id):
-    reservas_ativas = Reserva.objects.filter(situacaoreserva='ATIVA')
-    #reservas_expiradas = Reserva.objects.filter(situacaoreserva='EXPIRADA')
-    template = loader.get_template("reserva_view.html")
+@login_required()
+def view_reservas(request):
+    reservas = Reserva.objects.all()
+    template = loader.get_template("reservas.html")
     context = {
-        "reservas_ativas":reservas_ativas,
+        "reservas":reservas,
+    }
+    return HttpResponse (template.render(context,request))
+
+@login_required()
+def view_reservas_pessoa(request, pessoa_id=None):
+    if pessoa_id == None:
+        pessoa_id = request.user.id
+    pessoa = Pessoa.objects.get(id=pessoa_id)    
+    reservas_pessoa  = Reserva.objects.filter(pessoa=pessoa)
+    # validar se o usuário é a pessoa que está sendo consultada ou o usuário é administrador ou operador para mostrar a lista de reservas
+    if ((request.user.is_superuser or request.user.groups.filter(name__in=['Operador','Coordenador']).exists()) and pessoa_id != request.user.id) or pessoa_id != request.user.id:
+        messages.warning(request, 'O usuário só pode consultar as suas próprias reservas.')
+        return redirect('index')
+    if True:    
+        template = loader.get_template("reservas_pessoa.html")
+        context = {
+            "reservas_pessoa":reservas_pessoa,
+        }
+        return HttpResponse (template.render(context,request))
+    else:
+        messages.warning(request, 'O usuário só pode consultar as suas próprias reservas.')
+        return redirect('index')
+
+
+def obras_reserva(request,reserva_id):
+    reserva = Reserva.objects.get(id=reserva_id)
+    obras_reserva = Obra.objects.filter(reserva=reserva)
+    template = loader.get_template("obras_reserva.html")
+    context = {
+        "obras_reserva":obras_reserva,
     }
     return HttpResponse (template.render(context,request))
 

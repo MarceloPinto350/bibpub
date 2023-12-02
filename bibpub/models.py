@@ -22,6 +22,13 @@ OPC_GENERO = [
         (7,"Outra"),
         (8,"Não informado"),
     ] 
+SITUACAO_CHOICES = [
+        ('PENDENTE', 'Pendente'),
+        ('ATIVO', 'Ativo'),
+        ('SUSPENSO', 'Suspenso'),
+        ('BLOQUEADO', 'Bloqueado'),
+    ]
+ 
 #GRUPOS
 grupo_coordenador, created = Group.objects.get_or_create(name='Coordenador')
 grupo_operador, created = Group.objects.get_or_create(name='Operador')
@@ -47,12 +54,7 @@ class Categoria(models.Model):
 
 # Criação do modelo Pessoa
 class Pessoa(models.Model):
-    SITUACAO_CHOICES = [
-        ('PENDENTE', 'Pendente'),
-        ('ATIVO', 'Ativo'),
-        ('SUSPENSO', 'Suspenso'),
-        ('BLOQUEADO', 'Bloqueado'),
-    ]
+   
     Estados = models.TextChoices("Estados","AC AL AP AM BA CE DF ES GO MA MT MS MG PA PB PE PR PI RJ RN RO RR RS SC SP SE TO")
     OrigemCadastro = models.TextChoices("Origem cadastro" ,"INTERNET APLICAÇÃO")
     situacaocadastro = models.CharField(
@@ -328,19 +330,3 @@ class Reserva(models.Model):
             ("can_add_reserva", "Can add reservas"),
             ("can_delete_reserva", "Can delete reservas"),
         ]
-
-
-# Definição do modelo de ReservaObra
-#class ReservaObra(models.Model):
-#    reserva = models.ForeignKey (Reserva,on_delete=models.CASCADE,)
-#    obra = models.ForeignKey (Obra,on_delete=models.CASCADE,)
-
-    # retornar o valor padrão para a classe
-#    def __str__(self):
-#        return self.id
-
-    # define o nome padrão da tabela a ser criada no BD
- #   class Meta:
- #       db_table = "tb_reserva_obra"
- #       verbose_name = "Reserva obra"
- #       verbose_name_plural = "Reservas obras"
