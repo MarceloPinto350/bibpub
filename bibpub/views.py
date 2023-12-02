@@ -10,7 +10,7 @@ from django.http import Http404
 
 from bibpub.models import Editora
 from .models import Obra, Unidade, Pessoa, Reserva
-from .forms import PessoaForm   #, ReservaForm
+from .forms import PessoaForm, ReservaForm
 from .forms import CadastroPessoaForm
 from django.contrib import messages
 from .decorators import groups_required
@@ -68,7 +68,38 @@ def delete_pessoa_view(request, pessoa_id):
         return redirect('pessoa_list_view')
     return render(request, 'pessoa_delete_confirm.html', {'item': item})
 
+
+############################################################################################################
 # Reservas
+############################################################################################################
+@login_required()
+def criar_reserva(request):
+    criar_reserva = Reserva.objects.filter(pessoa=request.user.pessoa)
+    #criar_reserva = Reserva.objects.filter(situacaoreserva='ATIVA')
+    #criar_reserva = Reserva.objects.all()
+    if request.method == 'POST':
+        form = ReservaForm(request.POST)
+        if form.is_valid():
+            reserva = form.save(commit=False)
+            if not request.user.groups.filter(name__in=['ADMIN', 'OPERADOR']).exists():                
+                reserva.pessoa = request.user.pessoa
+            reserva.situacaoreserva = 'PENDENTE'
+            reserva.save()
+            messages.success(request, 'Reserva realizada com sucesso.')
+            return redirect('index')
+        else:
+            messages.warning(request, 'Não foi possível realizar a reserva.')
+            return redirect('index')   
+    else:
+        form = ReservaForm()
+        
+    template = loader.get_template("criar_reserva.html")
+    context = {
+        "form":criar_reserva,
+    }
+    return HttpResponse (template.render(context,request))
+    
+
 @login_required()
 def view_reservas(request):
     reservas = Reserva.objects.all()
@@ -125,7 +156,7 @@ def cadastrar_pessoa(request):
 
     return render(request, 'cadastrar_pessoa.html', {'form': form})
 
-@groups_required(['Coordenador', 'Operador'])
+@groups_required(['ADMIN', 'OPERADOR'])
 def avaliar_cadastros(request):
     cadastros_pendentes = Pessoa.objects.filter(situacaocadastro='PENDENTE')
     if request.method == 'POST':

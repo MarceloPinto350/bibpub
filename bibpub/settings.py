@@ -142,6 +142,9 @@ LOGOUT_REDIRECT_URL = 'login'
 ADMIN_URL = 'admin'
 STATIC_URL = "static/"
 
+DATE_INPUT_FORMATS = ['%d/%m/%Y']
+DATE_FORMAT = '%d/%m/%Y'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 

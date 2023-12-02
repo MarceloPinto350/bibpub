@@ -36,7 +36,8 @@ urlpatterns = [
     path('avaliar_cadastros/', views.avaliar_cadastros, name='avaliar_cadastros'),
     # reserva
     path ("reservas/", views.view_reservas, name="view_reservas"),
-    path ('reservas/<int:pessoa_id>/', views.view_reservas_pessoa, name="view_reservas_pessoa"),    
+    path ("criar_reserva/", views.criar_reserva,name="criar_reserva"),
+    path ('reservas_pessoa/<int:pessoa_id>/', views.view_reservas_pessoa, name="view_reservas_pessoa"),    
     path ('obras_reserva/<int:reserva_id>/', views.obras_reserva, name="obras_reserva"),    
     # admin
     path("admin/", admin.site.urls),

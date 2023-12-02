@@ -67,25 +67,12 @@
             <h1>Biblioteca Pública</h1>
         </div>
     
-        <h2>Lista de reservas</h2>
+        <h2>Incluir reserva</h2>
     
         <form method="post">
             {% csrf_token %}
-            <table> 
-                <tr>
-                    <th> Pessoa </th>
-                    <th> Data da Reserva </th>
-                    <th> Situação da Reserva </th>
-                    <th> Obras </th>
-                {% for reserva in reservas %}
-                        <tr>
-                            <td> {{ reserva.pessoa  }} </td>
-                            <td> {{ reserva.datareserva }} </td>
-                            <td> {{ reserva.sitaucaoreserva }} </td>
-                            <td> <a href="{% url 'obras_reserva' reserva.id %}">Consultar Obras</a> </td>
-                        </tr>
-                {% endfor %}
-            </table>
+            {{ form.as_p }}     <!-- para fazer o display de todos os campos do formulário-->
+            <button type="submit">Gravar</button>
         </form>
     </body>
 </html>

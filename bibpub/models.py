@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 from django.contrib.auth.models import User, Group
 
@@ -30,9 +31,9 @@ SITUACAO_CHOICES = [
     ]
  
 #GRUPOS
-grupo_coordenador, created = Group.objects.get_or_create(name='Coordenador')
-grupo_operador, created = Group.objects.get_or_create(name='Operador')
-grupo_usuario, created = Group.objects.get_or_create(name='Usuário')
+grupo_coordenador, created = Group.objects.get_or_create(name='ADMIN')
+grupo_operador, created = Group.objects.get_or_create(name='OPERADOR')
+grupo_usuario, created = Group.objects.get_or_create(name='USUARIO')
 
 # Classes
 class Categoria(models.Model):
@@ -304,7 +305,8 @@ class Reserva(models.Model):
     pessoa = models.ForeignKey(Pessoa, verbose_name=("Pessoa"), on_delete=models.CASCADE,)
     obra = models.ManyToManyField(Obra, verbose_name=("Obra"))
     situacaoreserva = models.CharField("Situação da reserva",max_length = 10, default="ATIVA", null=False, choices=SituacaoReserva.choices)
-    datareserva = models.DateTimeField ("Data da reserva",auto_now_add=True, null=False)
+    #datareserva = models.DateTimeField ("Data da reserva",auto_now_add=True, null=False)
+    datareserva = models.DateTimeField ("Data da reserva",default=datetime.now, null=False)
     
     # retornar o valor padrão para a classe
     def __str__(self):
@@ -323,7 +325,8 @@ class Reserva(models.Model):
         db_table = "tb_reserva"
         verbose_name = "Reserva"
         verbose_name_plural = "Reservas"
-        ordering = ['pessoa','datareserva']
+        ordering = ['pessoa','-datareserva']
+        
         permissions = [
             ("can_view_reserva", "Can view reservas"),
             ("can_change_reserva", "Can change reservas"),

@@ -12,9 +12,13 @@ class PessoaForm(forms.ModelForm):
 class ReservaForm(forms.ModelForm):
     class Meta:
         model = Reserva
-        fields = ['pessoa', 'situacaoreserva']
-        all_reservas = Reserva.objects.all()
+        fields = ['pessoa', 'situacaoreserva', 'datareserva','obra']
+        widgets = {
+            'obra': forms.SelectMultiple(attrs={'size': 3}),
+        }
+        #todas_reservas = Reserva.objects.all()
         
+
 
 class CadastroPessoaForm(forms.ModelForm):
     class Meta:
