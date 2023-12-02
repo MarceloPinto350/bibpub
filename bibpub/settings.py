@@ -94,8 +94,8 @@ DATABASES = {
         'NAME': 'bibpubdb',
         'USER': 'bibpub',
         'PASSWORD': '@dm1n',
-        #'HOST': '172.17.0.3',
-        'HOST': 'db',    # ajustado conforme o deply da aplicação #37
+        'HOST': '172.17.0.3',
+        #'HOST': 'db',    # ajustado conforme o deply da aplicação #37
         'PORT': '5432'
     }
 }
@@ -141,6 +141,9 @@ LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'login'
 ADMIN_URL = 'admin'
 STATIC_URL = "static/"
+
+DATE_INPUT_FORMATS = ['%d/%m/%Y']
+DATE_FORMAT = '%d/%m/%Y'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

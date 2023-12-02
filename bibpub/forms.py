@@ -1,5 +1,5 @@
 from django import forms
-from .models import Pessoa, Reserva
+from .models import Pessoa, Reserva, Obra   
 
 class PessoaForm(forms.ModelForm):
     class Meta:
@@ -9,15 +9,19 @@ class PessoaForm(forms.ModelForm):
                 'cidade', 'uf','origem', 'situacaocadastro']
 
 # reservas
-#class ReservaForm(forms.ModelForm):
-#    class Meta:
-#        model = Reserva
-#        fields = ['pessoa', 'obra', 'situacaoreserva']
-#        #exclude = ['datareserva']
-#        all_reservas = Reserva.objects.all()
+class ReservaForm(forms.ModelForm):
+    class Meta:
+        model = Reserva
+        fields = ['pessoa', 'situacaoreserva', 'datareserva','obra']
+        widgets = {
+            'obra': forms.SelectMultiple(attrs={'size': 3}),
+        }
+        #todas_reservas = Reserva.objects.all()
         
+
 
 class CadastroPessoaForm(forms.ModelForm):
     class Meta:
         model = Pessoa
-        fields = ['nome', 'nascimento', 'cpf', 'sexo', 'genero', 'email', 'cep', 'endereco', 'cidade', 'uf', 'origem']
+        fields = ['nome', 'nascimento', 'cpf', 'sexo', 'genero', 'email', 
+                  'cep', 'endereco', 'cidade', 'uf', 'origem']

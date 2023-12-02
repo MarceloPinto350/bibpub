@@ -26,7 +26,6 @@ admin.site.index_title = 'Bem-vindo ao Painel Administrativo'
 urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),
     path ("",views.index, name="index"),
-    # path ("obra/<int:obra_id>/", views.obra,name="obra"),    #visualiza
     # pessoa
     path("pessoa/", views.list_pessoa_view, name="list_pessoa_view"),
     path("pessoa/criar/", views.create_pessoa_view, name="create_pessoa_view"),
@@ -36,7 +35,10 @@ urlpatterns = [
     path('cadastrar_pessoa/', views.cadastrar_pessoa, name='cadastrar_pessoa'),
     path('avaliar_cadastros/', views.avaliar_cadastros, name='avaliar_cadastros'),
     # reserva
-    #path ("reserva/<int:reserva_id>/", views.view_reserva, name="view_reserva"),    #visualiza 
+    path ("reservas/", views.view_reservas, name="view_reservas"),
+    path ("criar_reserva/", views.criar_reserva,name="criar_reserva"),
+    path ('reservas_pessoa/<int:pessoa_id>/', views.view_reservas_pessoa, name="view_reservas_pessoa"),    
+    path ('obras_reserva/<int:reserva_id>/', views.obras_reserva, name="obras_reserva"),    
     # admin
     path("admin/", admin.site.urls),
 ]

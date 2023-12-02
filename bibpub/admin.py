@@ -35,7 +35,7 @@ admin.site.register(Editora,EditoraAdmin)
 # registrando a Obra
 class UnidadeEmLinha(admin.TabularInline):
     model = Unidade 
-    list_per_page = 10
+    list_per_page = 3
     readonly_fields = ('obra','datainclusao',)
     extra = 2
 
@@ -60,11 +60,12 @@ admin.site.register(Pais,PaisAdmin)
 
 # registrando a Reserva    
 class ReservaAdmin(ModelAdmin):
-    list_display = ('pessoa','datareserva','situacaoreserva',)
+    list_display = ('pessoa','situacaoreserva')
     list_display_icons = True
     list_per_page = 10
     #filter = (ObraAdmin.get_unidades_disponiveis(self.obra_id) > 0)
     readonly_fields = ('situacaoreserva','datareserva',)
+    #readonly_fields = ('datareserva')
     #inlines = [ObraEmLinha]
 admin.site.register(Reserva,ReservaAdmin)
 
@@ -72,10 +73,11 @@ admin.site.register(Reserva,ReservaAdmin)
 class ReservaEmLinha(admin.TabularInline):
     model = Reserva
     extra = 0
-    max_num = 10
+    max_num = 1
     ordering   = ('situacaoreserva','-datareserva',)
-    readonly_fields = ('obra','situacaoreserva','datareserva')
-    can_delete = False 
+    #readonly_fields = ('obra','situacaoreserva','datareserva')
+    readonly_fields = ('datareserva',)
+    #can_delete = False 
     
 class PessoaAdmin(ModelAdmin):
     list_display = ('nome', 'nascimento', 'cpf', 'sexo', 
