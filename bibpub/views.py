@@ -74,15 +74,13 @@ def delete_pessoa_view(request, pessoa_id):
 ############################################################################################################
 @login_required()
 def criar_reserva(request):
-    criar_reserva = Reserva.objects.filter(pessoa=request.user.pessoa)
-    #criar_reserva = Reserva.objects.filter(situacaoreserva='ATIVA')
-    #criar_reserva = Reserva.objects.all()
+    criar_reserva = Reserva.objects.all()
     if request.method == 'POST':
         form = ReservaForm(request.POST)
         if form.is_valid():
             reserva = form.save(commit=False)
-            if not request.user.groups.filter(name__in=['ADMIN', 'OPERADOR']).exists():                
-                reserva.pessoa = request.user.pessoa
+            #if not request.user.groups.filter(name__in=['ADMIN', 'OPERADOR']).exists():                
+            #    reserva.pessoa = request.user.pessoa
             reserva.situacaoreserva = 'PENDENTE'
             reserva.save()
             messages.success(request, 'Reserva realizada com sucesso.')
@@ -102,13 +100,25 @@ def criar_reserva(request):
 
 @login_required()
 def view_reservas(request):
-    reservas = Reserva.objects.all()
-    template = loader.get_template("reservas.html")
+    usuario = request.user
+    # obter a pessoal correspondnete ao usuário logado
+    try:
+        pessoa = Pessoa.objects.get(cpf=usuario.username)
+    except Exception as e:
+        pessoa = None
+    # montar a lista de reservas para o usuário logado conforme o papel 
+    if not usuario.is_superuser or usuario.groups.filter(name__in=['ADMIN','OPERADOR']).exists() and not pessoa == None:
+        reservas = Reserva.objects.filter(pessoa=pessoa)
+    else:
+        reservas = Reserva.objects.all()       
     context = {
         "reservas":reservas,
     }
+    template = loader.get_template("reservas.html")
     return HttpResponse (template.render(context,request))
-
+    
+    
+    
 @login_required()
 def view_reservas_pessoa(request, pessoa_id=None):
     if pessoa_id == None:

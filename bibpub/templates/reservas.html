@@ -71,18 +71,22 @@
     
         <form method="post">
             {% csrf_token %}
+            <p align right>
+                <a href="{% url 'criar_reserva' %}">Nova Reserva</a>
+            </p>
+
             <table> 
-                <tr>
+                <tr align=left>
                     <th> Pessoa </th>
                     <th> Data da Reserva </th>
                     <th> Situação da Reserva </th>
                     <th> Obras </th>
                 {% for reserva in reservas %}
-                        <tr>
+                        <tr >
                             <td> {{ reserva.pessoa  }} </td>
                             <td> {{ reserva.datareserva }} </td>
                             <td> {{ reserva.sitaucaoreserva }} </td>
-                            <td> <a href="{% url 'obras_reserva' reserva.id %}">Consultar Obras</a> </td>
+                            <td> <a href="{% url 'obras_reserva' reserva.id %}">Obras da reserva</a> </td>
                         </tr>
                 {% endfor %}
             </table>
