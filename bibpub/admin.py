@@ -35,13 +35,14 @@ admin.site.register(Editora,EditoraAdmin)
 # registrando a Obra
 class UnidadeEmLinha(admin.TabularInline):
     model = Unidade 
+    list_filter = ('disponibilidade',)
     list_per_page = 3
     readonly_fields = ('obra','datainclusao',)
     extra = 2
 
 class ObraAdmin(ModelAdmin):
     list_display = ('titulo', 'anopublicacao', 'tipo', 'datacadastro', 'descricao',) #, 'mostra_categoria', 'mostra_autor')
-    list_filter = ('titulo', 'autor')
+    list_filter = ('titulo', 'categoria','autor')
     search_fields = ['titulo', 'autor__nome']
     inlines = [UnidadeEmLinha]
     list_display_icons = True
