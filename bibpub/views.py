@@ -74,28 +74,31 @@ def delete_pessoa_view(request, pessoa_id):
 ############################################################################################################
 @login_required()
 def criar_reserva(request):
-    criar_reserva = Reserva.objects.all()
-    if request.method == 'POST':
-        form = ReservaForm(request.POST)
-        if form.is_valid():
-            reserva = form.save(commit=False)
-            #if not request.user.groups.filter(name__in=['ADMIN', 'OPERADOR']).exists():                
-            #    reserva.pessoa = request.user.pessoa
-            reserva.situacaoreserva = 'PENDENTE'
-            reserva.save()
-            messages.success(request, 'Reserva realizada com sucesso.')
-            return redirect('index')
+    #criar_reserva = Reserva.objects.all()
+    usuario = request.user
+    # obter a pessoal correspondnete ao usuário logado
+    try:
+        pessoa = Pessoa.objects.get(cpf=usuario.username)
+        if request.method == 'POST':
+            form = ReservaForm(request.POST)
+            if form.is_valid():
+                reserva = form.save(commit=False)
+                if request.user.is_superuser or request.user.groups.filter(name__in=['ADMIN', 'OPERADOR']).exists():
+                    reserva.pessoa = pessoa
+                reserva.situacaoreserva = 'PENDENTE'
+                reserva.save()
+                messages.success(request, 'Reserva realizada com sucesso.')
+                return redirect('view_reservas')   
+            else:
+                messages.warning(request, 'Não foi possível realizar a reserva.')
+                return redirect('view_reservas')   
         else:
-            messages.warning(request, 'Não foi possível realizar a reserva.')
-            return redirect('index')   
-    else:
-        form = ReservaForm()
-        
-    template = loader.get_template("criar_reserva.html")
-    context = {
-        "form":criar_reserva,
-    }
-    return HttpResponse (template.render(context,request))
+            form = ReservaForm()
+            
+    except Exception as e:
+        pessoa = None
+            
+    return render(request,"reserva_criar.html",{"form":criar_reserva})
     
 
 @login_required()
