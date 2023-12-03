@@ -15,7 +15,6 @@ class CategoriaAdmin(ModelAdmin):
     list_display = ('descricao',)
     list_display_icons = True
     list_per_page = 10
-
 admin.site.register(Categoria, CategoriaAdmin)
 
 # registando o Autor
@@ -88,6 +87,16 @@ class PessoaAdmin(ModelAdmin):
     list_display_icons = True
     list_per_page = 10
     inlines = [ReservaEmLinha]  
+    actions = ['suspender_usuario','bloquear_usuario','desbloquear_usuario',]
+    @admin.action(description='Suspender usuário')
+    def suspender_usuario(self, request, queryset):
+        queryset.update(situacaocadastro='SUSPENSO')
+    @admin.action(description='Bloquear usuário')
+    def bloquear_usuario(self, request, queryset):
+        queryset.update(situacaocadastro='BLOQUEADO')
+    @admin.action(description='Ativar usuário')
+    def remover_suspensao(self, request, queryset):
+        queryset.update(situacaocadastro='ATIVO')  
 admin.site.register(Pessoa, PessoaAdmin)
 
 admin.site.register(User)
