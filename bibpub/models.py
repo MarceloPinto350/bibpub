@@ -1,6 +1,7 @@
 import datetime
 from django.db import models
 from django.contrib.auth.models import User, Group
+from django.core.validators import EmailValidator, RegexValidator
 
 # outros imports usados
 from datetime import datetime
@@ -30,6 +31,37 @@ SITUACAO_CHOICES = [
         ('BLOQUEADO', 'Bloqueado'),
     ]
  
+ESTADOS = [
+        ("AC","Acre"),
+        ("AL","Alagoas"),
+        ("AP","Amapá"),
+        ("AM","Amazonas"),
+        ("BA","Bahia"),
+        ("CE","Ceará"),
+        ("DF","Distrito Federal"),
+        ("ES","Espírito Santo"),
+        ("GO","Goiás"),
+        ("MA","Maranhão"),
+        ("MT","Mato Grosso"),
+        ("MS","Mato Grosso do Sul"),
+        ("MG","Minas Gerais"),
+        ("PA","Pará"),
+        ("PB","Paraíba"),
+        ("PR","Paraná"),
+        ("PE","Pernambuco"),
+        ("PI","Piauí"),
+        ("RJ","Rio de Janeiro"),
+        ("RN","Rio Grande do Norte"),
+        ("RS","Rio Grande do Sul"),
+        ("RO","Rondônia"),
+        ("RR","Roraima"),
+        ("SC","Santa Catarina"),
+        ("SP","São Paulo"),
+        ("SE","Sergipe"),
+        ("TO","Tocantins"), 
+    ]
+     
+ 
 #GRUPOS
 grupo_coordenador, created = Group.objects.get_or_create(name='ADMIN')
 grupo_operador, created = Group.objects.get_or_create(name='OPERADOR')
@@ -55,8 +87,7 @@ class Categoria(models.Model):
 
 # Criação do modelo Pessoa
 class Pessoa(models.Model):
-   
-    Estados = models.TextChoices("Estados","AC AL AP AM BA CE DF ES GO MA MT MS MG PA PB PE PR PI RJ RN RO RR RS SC SP SE TO")
+    #Estados = models.TextChoices("Estados","AC AL AP AM BA CE DF ES GO MA MT MS MG PA PB PE PR PI RJ RN RO RR RS SC SP SE TO")
     OrigemCadastro = models.TextChoices("Origem cadastro" ,"INTERNET APLICAÇÃO")
     situacaocadastro = models.CharField(
         max_length=10,
@@ -64,27 +95,25 @@ class Pessoa(models.Model):
         default='PENDENTE',
         verbose_name="Situação do cadastro",
     )
-    #id = models.BigAutoField(primary_key=True)
     nome = models.CharField("Nome", max_length=200, null=False,db_index=True)
     nascimento = models.DateField("Data nascimento")
     cpf = models.CharField("CPF", max_length=14, null=False, unique=True)
     #criar validador para CPF
     sexo = models.CharField("Sexo", max_length=1, null=False, choices=OPC_SEXO,default="N")
     genero = models.IntegerField("Gênero", null=False, choices=OPC_GENERO,default=8)
-    email = models.CharField("E-Mail", max_length=254, null=False)
+    #email = models.CharField("E-Mail", max_length=254, null=False)
     # Verificar o uso do validador de e-mails
-    #eMail = models.CharField("E-Mail", max_length=254, null=False,
-    #        validator=[
-    #            EmailValidator(message="Informe um e-mail válido!",
-    #            code=None,
-    #            allowlist=None)
-    #        ])
+    email = models.CharField("E-Mail", max_length=254, null=False,validators=   [
+                EmailValidator(message="Informe um e-mail válido!",
+                code=None,
+                allowlist=None)
+            ])
     cep = models.CharField("CEP", max_length=9)
     # criar validador para CEP
     #cep = models.ForeignKey (ZipCode,on_delete=models.SET_NULL, blank=True, null=True,)
     endereco = models.CharField("Endereço", max_length=200, null=False)
     cidade = models.CharField("Cidade", max_length=200, null=False)
-    uf = models.CharField("UF", max_length=2, null=False, choices=Estados.choices)
+    uf = models.CharField("UF", max_length=2, null=False, choices=ESTADOS)
     cadastro = models.DateTimeField ("Data do cadastro",auto_now_add=True)
     origem = models.CharField("Origem do cadastro", max_length=10, null=False, default="INTERNET", choices=OrigemCadastro.choices)
 
@@ -92,6 +121,28 @@ class Pessoa(models.Model):
     def __str__(self):
         return self.nome
 
+    def cpf_valido(self):
+        """Valida o CPF da pessoa"""
+        regex = r"^[0-9]{3}\.[0-9]{3}\.[0-9]{3}\-[0-9]{2}$"
+        validator = RegexValidator(regex) 
+        return validator.validate(self.cpf) and self.num_cpf_valido()
+
+    def num_cpf_valido(self):
+        """ Valida o número do CPF.
+            Args:
+                cpf: O número do CPF a ser validado.
+            Returns:
+                Retorna `True` se o número do CPF for válido, `False` caso contrário.
+        """
+        cpf = self.cpf.replace('.', '').replace('-', '')
+        cpf_list = list(cpf)
+        multiplicadores = [1, 2, 1, 2, 1, 2, 1, 2, 1, 2]
+        somatorio = 0
+        for index, digito in enumerate(cpf_list):
+            somatorio += int(digito) * multiplicadores[index]
+        resto_divisao = somatorio % 11
+        return cpf_list[9] == str(resto_divisao)
+    
     # define o nome padrão da tabela a ser criada no BD
     class Meta:
         db_table = "tb_pessoa"
@@ -126,6 +177,10 @@ class Autor(models.Model):
     def __str__(self):
         return self.nome 
 
+    def data_nascimento_valida(self):
+        """Data de nascimento do autor retorna False para data futura e para data muito recente (<5 anos)"""
+        return self.nascimento <= datetime.date.today()-datetime.timedelta(days=5*365) and self.nascimento <= datetime.date.today()
+    
     # define as configuraçẽos da classe Meta (dados de BD)
     class Meta:
         db_table = "tb_autor"
@@ -168,13 +223,14 @@ class Pais(models.Model):
 class Editora(models.Model):
     nome = models.CharField("Nome da editora", max_length=200, null=False, unique=True)
     email = models.CharField("E-Mail editora", max_length=254, null=False)
-    # criar validação para os e-mails
-    #pais = models.CharField("País da editora", max_length=100, null=False)
     pais = models.ForeignKey(Pais, verbose_name=("País"), on_delete=models.CASCADE, null=False)
-    # validar conformme tabela de países a ser criada
-
+    
     def __str__(self):
         return self.nome 
+    
+    def email_valido(self):
+        """Valida o e-mail da editora"""
+        return EmailValidator().validate(self.email)
     
     # define as configurações da classe Meta (dados de BD)
     class Meta:
@@ -285,6 +341,16 @@ class Emprestimo(models.Model):
     prazo = models.PositiveSmallIntegerField("Prazo do empréstimo em dias", default=10)
     # criar regra de validação para os prazos entre min=10, max=90
     data_devol = models.DateTimeField("Data da efetiva devolução", null=True)
+    
+    def __str__(self):
+        return f"{self.pessoa.nome} - {self.obras.titulo}: {self.dataemprest}"
+    
+    def mostra_obras(self):
+        return ', '.join(obra.titulo for obra in self.obras.all()[:1])
+    
+    def prazo_valido(self):
+        """Valida o prazo do empréstimo"""
+        return self.prazo >= 30 and self.prazo <= 90
     
     # define as configurações da classe Meta (dados de BD)
     class Meta:
