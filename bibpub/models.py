@@ -1,11 +1,14 @@
-import datetime
+# immports do Django
 from django.db import models
 from django.contrib.auth.models import User, Group
 from django.core.validators import EmailValidator, RegexValidator
+from django.urls import reverse 
 
 # outros imports usados
-from datetime import datetime
-from django.urls import reverse 
+from datetime import date, timedelta, datetime
+import re
+from bibpub.gerais import num_cpf_valido
+
 
 # definições globais
 OPC_SEXO = [
@@ -98,7 +101,6 @@ class Pessoa(models.Model):
     nome = models.CharField("Nome", max_length=200, null=False,db_index=True)
     nascimento = models.DateField("Data nascimento")
     cpf = models.CharField("CPF", max_length=14, null=False, unique=True)
-    #criar validador para CPF
     sexo = models.CharField("Sexo", max_length=1, null=False, choices=OPC_SEXO,default="N")
     genero = models.IntegerField("Gênero", null=False, choices=OPC_GENERO,default=8)
     #email = models.CharField("E-Mail", max_length=254, null=False)
@@ -123,25 +125,23 @@ class Pessoa(models.Model):
 
     def cpf_valido(self):
         """Valida o CPF da pessoa"""
-        regex = r"^[0-9]{3}\.[0-9]{3}\.[0-9]{3}\-[0-9]{2}$"
-        validator = RegexValidator(regex) 
-        return validator.validate(self.cpf) and self.num_cpf_valido()
+        regex = re.compile(r"^[0-9]{3}\.[0-9]{3}\.[0-9]{3}\-[0-9]{2}$")
+        # TODO: validar o número do CPF
+        #numValido = num_cpf_valido(num_cpf=self.cpf)
+        #return re.match(regex,self.cpf) and num_cpf_valido(num_cpf=self.cpf)
+        #validando só o formato
+        return False if re.match(regex,self.cpf) == None else True
+        
 
-    def num_cpf_valido(self):
-        """ Valida o número do CPF.
-            Args:
-                cpf: O número do CPF a ser validado.
-            Returns:
-                Retorna `True` se o número do CPF for válido, `False` caso contrário.
-        """
-        cpf = self.cpf.replace('.', '').replace('-', '')
-        cpf_list = list(cpf)
-        multiplicadores = [1, 2, 1, 2, 1, 2, 1, 2, 1, 2]
-        somatorio = 0
-        for index, digito in enumerate(cpf_list):
-            somatorio += int(digito) * multiplicadores[index]
-        resto_divisao = somatorio % 11
-        return cpf_list[9] == str(resto_divisao)
+    
+    def data_nascimento_valida(self):
+        """Data de nascimento da pessoa retorna False para data de nascimento de hoje ou futura"""
+        return self.nascimento < date.today()
+    
+    def email_valido(self):
+        """Valida o e-mail da pessoa"""
+        regex = re.compile(r"^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$")
+        return True if re.match(regex, self.email) else False
     
     # define o nome padrão da tabela a ser criada no BD
     class Meta:
@@ -178,8 +178,8 @@ class Autor(models.Model):
         return self.nome 
 
     def data_nascimento_valida(self):
-        """Data de nascimento do autor retorna False para data futura e para data muito recente (<5 anos)"""
-        return self.nascimento <= datetime.date.today()-datetime.timedelta(days=5*365) and self.nascimento <= datetime.date.today()
+        """Data de nascimento do autor retorna False caso a data seja futura ou menor que 5 anos"""
+        return self.nascimento <= date.today()-timedelta(days=5*365) 
     
     # define as configuraçẽos da classe Meta (dados de BD)
     class Meta:
@@ -230,7 +230,8 @@ class Editora(models.Model):
     
     def email_valido(self):
         """Valida o e-mail da editora"""
-        return EmailValidator().validate(self.email)
+        regex = re.compile(r"^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$")
+        return True if re.match(regex, self.email) else False
     
     # define as configurações da classe Meta (dados de BD)
     class Meta:
@@ -256,7 +257,7 @@ class Obra(models.Model):
     #quantidade = models.PositiveSmallIntegerField('Quantidade de unidades', default=1, null=False)
     tipo  = models.CharField("Tipo de obra", max_length=10, null=False, choices=TipoObra.choices)
     datacadastro = models.DateTimeField("Data de registro da obra",auto_now_add=True,null=False,db_index=True)
-    dataatualizacao = models.DateTimeField("Data de modificação no registro da obra",auto_now_add=True,null=False)
+    dataatualizacao = models.DateTimeField("Data de modificação no registro da obra",auto_now=True,null=False)
     categoria = models.ForeignKey (Categoria, verbose_name=("Categoria"), on_delete=models.CASCADE,null=False)
     autor =  models.ForeignKey (Autor, verbose_name=("Autor"), on_delete=models.CASCADE,null=False)
     editora = models.ForeignKey (Editora, verbose_name=("Editora"), on_delete=models.CASCADE,null=False)
@@ -340,7 +341,7 @@ class Emprestimo(models.Model):
     dataemprest = models.DateTimeField ("Data do empréstimos",auto_now_add=True, null=False)
     prazo = models.PositiveSmallIntegerField("Prazo do empréstimo em dias", default=10)
     # criar regra de validação para os prazos entre min=10, max=90
-    data_devol = models.DateTimeField("Data da efetiva devolução", null=True)
+    datadevol = models.DateTimeField("Data da efetiva devolução", null=True)
     
     def __str__(self):
         return f"{self.pessoa.nome} - {self.obras.titulo}: {self.dataemprest}"
@@ -372,7 +373,7 @@ class Reserva(models.Model):
     obra = models.ManyToManyField(Obra, verbose_name=("Obra"))
     situacaoreserva = models.CharField("Situação da reserva",max_length = 10, default="ATIVA", null=False, choices=SituacaoReserva.choices)
     #datareserva = models.DateTimeField ("Data da reserva",auto_now_add=True, null=False)
-    datareserva = models.DateTimeField ("Data da reserva",default=datetime.now, null=False)
+    datareserva = models.DateTimeField ("Data da reserva",default=datetime.now(), null=False)
     
     # retornar o valor padrão para a classe
     def __str__(self):
