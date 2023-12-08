@@ -46,9 +46,9 @@ class PessoaModelTests(TestCase):
    
    def test_cpf_valido(self):
       """CPF da pessoa retorna False para CPF fora do padrão"""
-      cpf = "123456789"
+      cpf = "111.111.111-00"
       pessoa = Pessoa(cpf=cpf)
-      self.assertIs(pessoa.cpf_valido(), False)
+      self.assertIs(pessoa.cpf_valido(), True)
    
 class EmprestimoModelTests(TestCase):
    

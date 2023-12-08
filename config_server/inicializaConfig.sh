@@ -62,6 +62,7 @@ fi
 # Criar o container do Postgresql
 sudo docker run -d \
   --name bibpub-postgres \
+  --restart=always \
   -e POSTGRES_DB=bibpubdb \
   -e POSTGRES_USER=bibpub \
   -e POSTGRES_PASSWORD=@dm1n \

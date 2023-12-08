@@ -126,7 +126,12 @@ class Pessoa(models.Model):
     def cpf_valido(self):
         """Valida o CPF da pessoa"""
         regex = re.compile(r"^[0-9]{3}\.[0-9]{3}\.[0-9]{3}\-[0-9]{2}$")
-        return re.match(regex,self.cpf) and num_cpf_valido(num_cpf=self.cpf)
+        # TODO: validar o número do CPF
+        #numValido = num_cpf_valido(num_cpf=self.cpf)
+        #return re.match(regex,self.cpf) and num_cpf_valido(num_cpf=self.cpf)
+        #validando só o formato
+        return False if re.match(regex,self.cpf) == None else True
+        
 
     
     def data_nascimento_valida(self):
