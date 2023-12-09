@@ -90,8 +90,8 @@ Considerando que o software será desenvolvido em Pyton, será necessário acess
 ## Cronograma
 Os testes serão realizados em duas fases:
 
-	**Fase 1**: Testes de unidade e integração (2 semanas)
-	__Fase 2__: Testes de aceitação (1 semana)
+	*Fase 1*: Testes de unidade e integração (2 semanas)
+	*Fase 2*: Testes de aceitação (1 semana)
 
 ### Fase 1: Testes de unidade e integração
 Os testes de unidade serão realizados pelos desenvolvedores, com o objetivo de verificar se cada unidade de código funciona corretamente. Deverão adotar a estratégia de incluir o desenvolvimento dos casos de teste juntamente com a fase de desenvolvimento, visando minimizar eventuais retrabalhos na codificação.
