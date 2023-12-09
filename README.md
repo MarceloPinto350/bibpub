@@ -1,13 +1,15 @@
 # Descrição do projeto 
-Este projeto de aplicação para empréstimos de livros para bibliotecas públicas, é parte integrante do trabalho final da disciplina de PPGTI1004-DESENVOLVIMENTO WEB 2, do Programd de pós graduação em Tecnologia da Informação da Universidade Federal do Rio Grando do Norte (UFRN/IMD), ministrada pelo prof. Jean Mario Moreira de Lima.
+Este projeto de aplicação para empréstimos de livros para bibliotecas públicas, é parte integrante do trabalho final da disciplina de PPGTI1004-DESENVOLVIMENTO WEB 2 (1,2,3) e da disciplina PPGTI1011-TESTE DE SOFTWARE (1,2), do Programa de pós graduação em Tecnologia da Informação da Universidade Federal do Rio Grando do Norte (UFRN/IMD), ministrada pelos profs. Jean Mario Moreira de Lima e Uira Kulesza, respectivamente.
 
 ## Componenetes do grupo
-1. Alikson Oliveira
-2. Marcelo Pinto
-3. Vitor Lindbergh
-
+1. Alikson Oliveira (PPGTI1004 e PPGTI1011)
+2. Marcelo Pinto (PPGTI1004 e PPGTI1011)
+3. Vitor Lindbergh (SOMENTE PPGTI1004)
 
 ## Estrutura de pastas do projeto
+
+## testes
+Contem todas as documentações relativas aos testes
 
 ### config_server
 Contem as configurações da máquina usada como servidor (Docker)
