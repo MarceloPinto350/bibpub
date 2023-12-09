@@ -1,4 +1,4 @@
-import datetime
+#import datetime
 from datetime import datetime
 from .models import Obra, Categoria, Autor, Pais, Editora, Pessoa, Unidade, Reserva, Emprestimo, Pessoa, Obra
 # imports do python
@@ -59,7 +59,7 @@ class EmprestimoModelTests(TestCase):
         self.assertIs(emprestimo.prazo > 30, False)
 
     def test_prazo_superior(self):
-        """Prazo do empréstimo é de no máximo 365 dias, devendo retornar False para prazo superior a este limite"""
+        """Prazo do empréstimo é de no máximo 90 dias, devendo retornar False para prazo superior a este limite"""
         prazo = 200
         emprestimo = Emprestimo(prazo=prazo)
         self.assertIs(emprestimo.prazo < 90, False)
@@ -267,4 +267,5 @@ class EmprestimoTestCase(TestCase):
         emprestimo.save()
 
         self.assertIsNotNone(emprestimo.data_devol)
+
 

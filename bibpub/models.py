@@ -7,7 +7,7 @@ from django.urls import reverse
 # outros imports usados
 from datetime import date, timedelta, datetime
 import re
-from bibpub.gerais import num_cpf_valido
+from bibpub.utils import num_cpf_valido
 
 
 # definições globais
@@ -132,8 +132,6 @@ class Pessoa(models.Model):
         #validando só o formato
         return False if re.match(regex,self.cpf) == None else True
         
-
-    
     def data_nascimento_valida(self):
         """Data de nascimento da pessoa retorna False para data de nascimento de hoje ou futura"""
         return self.nascimento < date.today()
