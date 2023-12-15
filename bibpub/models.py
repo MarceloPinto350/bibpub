@@ -8,6 +8,7 @@ from django.urls import reverse
 from datetime import date, timedelta, datetime
 import re
 from bibpub.utils import num_cpf_valido
+from bibpub.validators import NascimentoValidator
 
 
 # definições globais
@@ -169,7 +170,9 @@ class Pessoa(models.Model):
 # Definição do modelo de Autor
 class Autor(models.Model):
     nome = models.CharField("Nome do autor", max_length=200, null=False, unique=True)
-    nascimento = models.DateField("Data de nascimento", null=True)
+    #nascimento = models.DateField("Data de nascimento", null=True)
+    nascimento = models.DateField("Data de nascimento", null=True, validators = [
+                    NascimentoValidator (message="Informe uma data de nascimento válida!",menorIdade=5)])
     biografia = models.TextField("Biografia do autor", max_length=1000, null=False)
  
     def __str__(self):

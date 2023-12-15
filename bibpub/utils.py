@@ -1,3 +1,5 @@
+
+
 def num_cpf_valido(num_cpf):
    """ Valida o número do CPF.
       Argumento:

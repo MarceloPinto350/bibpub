@@ -26,6 +26,7 @@ SECRET_KEY = "django-insecure-%x2xy^ptpf6kyfi53zh=q#65+3))$i3mj@gr4(0-q_(ao^cm%w
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+#ALLOWED_HOSTS = ["biblioteca.org.br", "192.168.0.22", "localhost"]
 ALLOWED_HOSTS = []
 
 
@@ -94,7 +95,7 @@ DATABASES = {
         'NAME': 'bibpubdb',
         'USER': 'bibpub',
         'PASSWORD': '@dm1n',
-        'HOST': '172.17.0.3',
+        'HOST': '172.17.0.2',
         #'HOST': 'db',    # ajustado conforme o deply da aplicação #37
         'PORT': '5432'
     }
