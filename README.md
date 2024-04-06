@@ -38,7 +38,7 @@ Para executar a aplicação acessar a máquina virtual, configurada na forma do 
     * $ cd bibpub-imd/deploy
     * $ docker-compose up
 
-Testar a aplicação acessando na sua máquina virtual o endereço localhost:8000 ou, na sua máquina principal, acessando o endereço da máquina virtal <ip>:8000.
+Testar a aplicação acessando na sua máquina virtual o endereço localhost:8000 ou, na sua máquina principal, acessando o endereço da máquina virtual <ip>:8000.
  
 
 ## Requisitos Funcionais
