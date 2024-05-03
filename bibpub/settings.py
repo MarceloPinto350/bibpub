@@ -92,12 +92,11 @@ WSGI_APPLICATION = "bibpub.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'bibpubdb',
-        'USER': 'bibpub',
-        'PASSWORD': '@dm1n',
-        'HOST': '172.17.0.2',
-        #'HOST': 'db',    # ajustado conforme o deply da aplicação #37
-        'PORT': '5432'
+        'NAME': os.getenv('POSTGRES_DB'),
+	    'USER': os.getenv('POSTGRES_USER'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        'HOST': os.getenv('POSTGRES_HOST'),
+        'PORT': os.getenv('POSTGRES_PORT')
     }
 }
 
