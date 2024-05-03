@@ -5,6 +5,7 @@ services:
   db:
     image: postgres:alpine
     container_name: bibpub-postgres
+    hostname: bibpub-db
     restart: always
     environment:
       - POSTGRES_DB=bibpubdb 
@@ -16,21 +17,29 @@ services:
       5432:5432
     volumes:
       postgres_data:/var/lib/postgresql/data 
-    copy:
-      - .scripts/carga_tb_autor.sql:/docker-entrypoint-initdb.d/carga_tb_autor.sql
-      - .scripts/carga_tb_editora.sql:/docker-entrypoint-initdb.d/carga_tb_editora.sql
-      - .scripts/carga_tb_categoria.sql:/docker-entrypoint-initdb.d/carga_tb_categoria.sql
-      - .scripts/carga_tb_obra.sql:/docker-entrypoint-initdb.d/carga_tb_obra.sql
-      - .scripts/carga_tb_pais.sql:/docker-entrypoint-initdb.d/carga_tb_pais.sql
-      - .scripts/carga_tb_pessoa.sql:/docker-entrypoint-initdb.d/carga_tb_pessoa.sql
-      - .scripts/carga_tb_unidade.sql:/docker-entrypoint-initdb.d/carga_tb_unidade.sql
+    # carga inicial de dados
+    #copy:
+    #  - .scripts/carga_tb_autor.sql:/docker-entrypoint-initdb.d/carga_tb_autor.sql
+    #  - .scripts/carga_tb_editora.sql:/docker-entrypoint-initdb.d/carga_tb_editora.sql
+    #  - .scripts/carga_tb_categoria.sql:/docker-entrypoint-initdb.d/carga_tb_categoria.sql
+    #  - .scripts/carga_tb_obra.sql:/docker-entrypoint-initdb.d/carga_tb_obra.sql
+    #  - .scripts/carga_tb_pais.sql:/docker-entrypoint-initdb.d/carga_tb_pais.sql
+    #  - .scripts/carga_tb_pessoa.sql:/docker-entrypoint-initdb.d/carga_tb_pessoa.sql
+    #  - .scripts/carga_tb_unidade.sql:/docker-entrypoint-initdb.d/carga_tb_unidade.sql
 
   # Aplicação web
   web:
     build: .
-    #command: ["./bibpub_web.sh"]
-    command: python manage.py runserver 0.0.0.0:8000
+    #command: python manage.py runserver 0.0.0.0:8000
     container_name: bibpub-web
+    image: "bibpub:3.1"
+    hostname: bibpub-app
+    environment:
+      - POSTGRES_HOST=172.18.0.2
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=bibpubdb
+      - POSTGRES_USER=bibpub
+      - POSTGRES_PASSWORD=@dm1n
     volumes:
       - .:/bibpub
     ports:
